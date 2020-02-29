@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>translations/tflite-examples_it.qm</file>
+    </qresource>
+</RCC>
