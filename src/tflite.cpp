@@ -21,18 +21,14 @@ void TFLiteBase::queueInit()
     m_initialized = false;
 }
 
-bool TFLiteBase::isInitialized()
-{
-    return m_initialized;
-}
-
 bool TFLiteBase::initialize()
 {
     if (m_initialized.exchange(true))
         return true;
 
     if (m_modelFile.trimmed().isEmpty()) {
-        qWarning() << "TensorFlow model filename empty";
+        setErrorString("TensorFlow model filename empty");
+        qWarning() << errorString();
         m_initialized = false;
         return false;
     }
@@ -40,7 +36,8 @@ bool TFLiteBase::initialize()
     m_model = FlatBufferModel::BuildFromFile(m_modelFile.toUtf8(), &m_error);
 
     if (m_model == nullptr) {
-        qWarning() << "TensorFlow model loading: ERROR";
+        setErrorString("TensorFlow model loading: ERROR");
+        qWarning() << errorString();
         m_initialized = false;
         return false;
     }
@@ -48,7 +45,8 @@ bool TFLiteBase::initialize()
     InterpreterBuilder builder(*m_model, m_resolver);
 
     if (builder(&m_interpreter) != kTfLiteOk) {
-        qWarning() << "Interpreter: ERROR";
+        setErrorString("Interpreter: ERROR");
+        qWarning() << errorString();
         m_initialized = false;
         return false;
     }
@@ -61,15 +59,20 @@ bool TFLiteBase::initialize()
     qDebug() << "Num. Threads:" << m_threads;
 
     if (m_interpreter->AllocateTensors() != kTfLiteOk) {
-        qWarning() << "Allocate tensors: ERROR";
+        setErrorString("Allocate tensors: ERROR");
+        qWarning() << errorString();
         m_initialized = false;
         return false;
     }
 
     if (!customInitStep()) {
+        setErrorString("Custom init step failed");
+        qWarning() << errorString();
         m_initialized = false;
         return false;
     }
+
+    setErrorString(QString());
 
     qDebug() << "Tensorflow initialization: OK";
 
@@ -88,4 +91,18 @@ void TFLiteBase::setInferenceTime(int time)
 
     m_inferenceTime = time;
     emit inferenceTimeChanged(m_inferenceTime);
+}
+
+QString TFLiteBase::errorString() const
+{
+    return m_errorString;
+}
+
+void TFLiteBase::setErrorString(const QString &errorString)
+{
+    if (m_errorString == errorString)
+        return;
+
+    m_errorString = errorString;
+    emit errorStringChanged(m_errorString);
 }

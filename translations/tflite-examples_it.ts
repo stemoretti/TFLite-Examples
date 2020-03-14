@@ -133,32 +133,32 @@
         <translation>Classificazione Immagini</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="122"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="110"/>
         <source>Pause inference</source>
         <translation>Ferma inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="122"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="110"/>
         <source>Resume inference</source>
         <translation>Riprendi inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="126"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="114"/>
         <source>Select camera</source>
         <translation>Seleziona camera</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="148"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="152"/>
         <source>&lt;br&gt;Please download an image classification model from &lt;a href=&apos;https://www.tensorflow.org/lite/models/image_classification/overview&apos;&gt;www.tensorflow.org/lite/models/image_classification/overview&lt;/a&gt;, then load it in the settings page.</source>
         <translation>&lt;br&gt;Scarica un modello di classificazione immagini da &lt;a href=&apos;https://www.tensorflow.org/lite/models/image_classification/overview&apos;&gt;www.tensorflow.org/lite/models/image_classification/overview&lt;/a&gt;, poi caricalo nella pagina delle impostazioni.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="154"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="164"/>
         <source>Invalid model file.</source>
         <translation>Modello non valido.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="155"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="165"/>
         <source>Model filename empty.</source>
         <translation>Nome file del modello vuoto.</translation>
     </message>
@@ -171,32 +171,32 @@
         <translation>Rivelamento Oggetti</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="142"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="131"/>
         <source>Pause inference</source>
         <translation>Ferma inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="142"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="131"/>
         <source>Resume inference</source>
         <translation>Riprendi inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="146"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="135"/>
         <source>Select camera</source>
         <translation>Seleziona camera</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="168"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="173"/>
         <source>&lt;br&gt;Please download an object detection model from &lt;a href=&apos;https://www.tensorflow.org/lite/models/object_detection/overview&apos;&gt;www.tensorflow.org/lite/models/object_detection/overview&lt;/a&gt;, then load it in the settings page.</source>
         <translation>&lt;br&gt;Scarica un modello di rilevamento oggetti da &lt;a href=&apos;https://www.tensorflow.org/lite/models/object_detection/overview&apos;&gt;www.tensorflow.org/lite/models/object_detection/overview&lt;/a&gt;, poi caricalo nella pagina delle impostazioni.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="174"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="185"/>
         <source>Invalid model file.</source>
         <translation>Modello non valido.</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="175"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="186"/>
         <source>Model filename empty.</source>
         <translation>Nome file del modello vuoto.</translation>
     </message>

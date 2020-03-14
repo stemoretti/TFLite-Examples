@@ -28,7 +28,6 @@ AppStackPage {
 
     Component.onCompleted: {
         loadCamera.start()
-        checkModel.start()
     }
 
     Timer {
@@ -38,16 +37,6 @@ AppStackPage {
         onTriggered: {
             vout.source = camera
             camera.start()
-        }
-    }
-
-    Timer {
-        id: checkModel
-
-        interval: 2000
-        onTriggered: {
-            if (!objectDetection.isInitialized())
-                modelPopup.open()
         }
     }
 
@@ -161,17 +150,47 @@ AppStackPage {
         }
     }
 
-    PopupInfo {
-        id: modelPopup
+    Rectangle {
+        id: modelMessage
 
-        property string message:
-            qsTr("<br>Please download an object detection model from " +
-                 "<a href='https://www.tensorflow.org/lite/models/object_detection/overview'>" +
-                 "www.tensorflow.org/lite/models/object_detection/overview</a>, " +
-                 "then load it in the settings page.")
+        visible: objectDetection.errorString.length > 0
 
-        text: (Settings.objectsModel.length > 0 ?
-                   qsTr("Invalid model file.") :
-                   qsTr("Model filename empty.")) + message
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2 - appToolBar.height / 2
+        implicitWidth: appWindow.width * (isPortrait ? 0.9 : 0.6)
+        implicitHeight: Math.min(messageLabel.implicitHeight, appWindow.height * 0.9)
+
+        color: "red"
+        opacity: 0.7
+        border.color: "darkred"
+        border.width: 2
+        radius: 10
+
+        LabelSubheading {
+            id: messageLabel
+
+            property string message:
+                qsTr("<br>Please download an object detection model from " +
+                     "<a href='https://www.tensorflow.org/lite/models/object_detection/overview'>" +
+                     "www.tensorflow.org/lite/models/object_detection/overview</a>, " +
+                     "then load it in the settings page.")
+
+            anchors.fill: parent
+            topPadding: 20
+            bottomPadding: 20
+            leftPadding: 8
+            rightPadding: 8
+            text: objectDetection.errorString + "<br>" +
+                  (Settings.objectsModel.length > 0 ?
+                       qsTr("Invalid model file.") :
+                       qsTr("Model filename empty.")) +
+                  message
+            color: "white"
+            opacity: 1.0
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            linkColor: isDarkTheme ? "lightblue" : "blue"
+            onLinkActivated: Qt.openUrlExternally(link)
+        }
     }
 }

@@ -60,18 +60,17 @@ static QImage argb_data_to_image(const uchar *data, int width, int height,
     int stride = (alpha < 0 ? 3 : 4);
 
     QImage image(width, height, QImage::Format_RGB888);
-    uchar *rgbInit = image.bits();
 
     for (int y = 1; y <= height; ++y) {
         // Quick fix for iOS devices. Will be handled better in the future
 #ifdef Q_OS_IOS
-        uchar *rgb = rgbInit + (y - 1) * width * 3;
+        uchar *rgb = image.scanLine(y - 1);
 #else
-        uchar *rgb = rgbInit + (height - y) * width * 3;
+        uchar *rgb = image.scanLine(height - y);
 #endif
         for (int x = 0; x < width; ++x) {
             // QTBUG-69968: endianess dependent format
-            uint32_t pixel = *(uint32_t*)data;
+            uint32_t pixel = *reinterpret_cast<const uint32_t *>(data);
             uchar r = 0xff & (pixel >> ((stride - 1 - red) * 8));
             uchar g = 0xff & (pixel >> ((stride - 1 - green) * 8));
             uchar b = 0xff & (pixel >> ((stride - 1 - blue) * 8));
@@ -119,7 +118,7 @@ void VideoFilter::setTflite(TFLiteBase *tflite)
     if (m_tflite == tflite)
         return;
 
-    m_tflite = dynamic_cast<TFLite<QImage>*>(tflite);
+    m_tflite = dynamic_cast<TFLite<QImage> *>(tflite);
     emit tfliteChanged(m_tflite);
 }
 

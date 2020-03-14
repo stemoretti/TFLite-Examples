@@ -19,6 +19,7 @@ class TFLiteBase : public QObject
     Q_PROPERTY(int threads MEMBER m_threads NOTIFY threadsChanged)
     Q_PROPERTY(bool acceleration MEMBER m_acceleration NOTIFY accelerationChanged)
     Q_PROPERTY(int inferenceTime READ inferenceTime NOTIFY inferenceTimeChanged)
+    Q_PROPERTY(QString errorString READ errorString NOTIFY errorStringChanged)
 
 public:
     explicit TFLiteBase(QObject *parent = nullptr);
@@ -27,16 +28,18 @@ public:
 
     void queueInit();
 
-    Q_INVOKABLE bool isInitialized();
-
     int inferenceTime() const;
     void setInferenceTime(int time);
+
+    QString errorString() const;
+    void setErrorString(const QString &errorString);
 
 Q_SIGNALS:
     void modelFileChanged(QString modelFile);
     void threadsChanged(int threads);
     void accelerationChanged(bool acceleration);
     void inferenceTimeChanged(int time);
+    void errorStringChanged(QString errorString);
 
 protected:
     bool initialize();
@@ -55,6 +58,7 @@ private:
     int m_threads;
     bool m_acceleration;
     int m_inferenceTime;
+    QString m_errorString;
 };
 
 template <typename T>
