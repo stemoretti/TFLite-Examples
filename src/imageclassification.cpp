@@ -13,6 +13,7 @@ ImageClassification::ImageClassification(QObject *parent)
     : TFLite<QImage>(parent)
     , m_threshold(0.001)
 {
+    connect(this, &ImageClassification::labelsFileChanged, this, &TFLite::queueInit);
 }
 
 bool ImageClassification::customInitStep()
@@ -54,8 +55,9 @@ bool ImageClassification::preProcessing(const QImage &input)
                                    wanted_height, wanted_width, wanted_channels, false);
             break;
         default:
-            qDebug() << "Cannot handle input type"
-                     << m_interpreter->tensor(input)->type << "yet";
+            setErrorString("Cannot handle input type " +
+                           QString::number(m_interpreter->tensor(input)->type) + " yet");
+            qWarning() << errorString();
             return false;
         }
     }

@@ -6,7 +6,6 @@
 #include <QDebug>
 #include <QFile>
 
-#include "tensorflow/lite/error_reporter.h"
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/kernels/register.h"
@@ -47,7 +46,6 @@ protected:
     std::unique_ptr<tflite::Interpreter> m_interpreter;
     std::unique_ptr<tflite::FlatBufferModel> m_model;
     tflite::ops::builtin::BuiltinOpResolver m_resolver;
-    tflite::StderrReporter m_error;
 
 private:
     Q_DISABLE_COPY(TFLiteBase)

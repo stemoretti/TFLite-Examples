@@ -245,5 +245,6 @@ void VideoFilterRunnable::processVideoFrame(SimpleVideoFrame &frame, int orienta
     if (orientation)
         image = Utils::rotateImage(image, orientation);
 
-    m_filter->m_tflite->run(image);
+    if (!m_filter->m_tflite->run(image))
+        m_filter->setActive(false);
 }

@@ -2,7 +2,24 @@
 
 #include <QThread>
 
+#include "tensorflow/lite/error_reporter.h"
+
 using namespace tflite;
+
+class Error : public ErrorReporter {
+public:
+    explicit Error(QString *error) : m_error(error) {}
+
+    int Report(const char *format, va_list args) override {
+        *m_error = QString::vasprintf(format, args);
+        va_end(args);
+
+        return 0;
+    }
+
+private:
+    QString *m_error;
+};
 
 TFLiteBase::TFLiteBase(QObject *parent)
     : QObject(parent)
@@ -33,10 +50,13 @@ bool TFLiteBase::initialize()
         return false;
     }
 
-    m_model = FlatBufferModel::BuildFromFile(m_modelFile.toUtf8(), &m_error);
+    QString errorMessage;
+    Error error(&errorMessage);
+
+    m_model = FlatBufferModel::BuildFromFile(m_modelFile.toUtf8(), &error);
 
     if (m_model == nullptr) {
-        setErrorString("TensorFlow model loading: ERROR");
+        setErrorString(errorMessage);
         qWarning() << errorString();
         m_initialized = false;
         return false;
@@ -45,7 +65,7 @@ bool TFLiteBase::initialize()
     InterpreterBuilder builder(*m_model, m_resolver);
 
     if (builder(&m_interpreter) != kTfLiteOk) {
-        setErrorString("Interpreter: ERROR");
+        setErrorString("Interpreter builder failed");
         qWarning() << errorString();
         m_initialized = false;
         return false;
@@ -59,15 +79,13 @@ bool TFLiteBase::initialize()
     qDebug() << "Num. Threads:" << m_threads;
 
     if (m_interpreter->AllocateTensors() != kTfLiteOk) {
-        setErrorString("Allocate tensors: ERROR");
+        setErrorString("Allocate tensors failed");
         qWarning() << errorString();
         m_initialized = false;
         return false;
     }
 
     if (!customInitStep()) {
-        setErrorString("Custom init step failed");
-        qWarning() << errorString();
         m_initialized = false;
         return false;
     }

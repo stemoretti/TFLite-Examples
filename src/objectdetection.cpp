@@ -41,6 +41,7 @@ ObjectDetection::ObjectDetection(QObject *parent)
     , m_boxes(new BoxesModel(this))
     , m_confidence(0.6)
 {
+    connect(this, &ObjectDetection::labelsFileChanged, this, &TFLite::queueInit);
     connect(this, &ObjectDetection::results, m_boxes, &BoxesModel::reset, Qt::QueuedConnection);
 }
 
@@ -56,7 +57,8 @@ bool ObjectDetection::customInitStep()
     wanted_channels = dims->data[3];
 
     if (m_interpreter->outputs().size() != 4) {
-        qDebug() << "ERROR: Graph needs to have exactly 4 outputs";
+        setErrorString("Graph needs to have exactly 4 outputs");
+        qWarning() << errorString();
         return false;
     }
 
@@ -92,8 +94,9 @@ bool ObjectDetection::preProcessing(const QImage &input)
                                    wanted_height, wanted_width, wanted_channels, false);
             break;
         default:
-            qDebug() << "Cannot handle input type"
-                     << m_interpreter->tensor(input)->type << "yet";
+            setErrorString("Cannot handle input type " +
+                           QString::number(m_interpreter->tensor(input)->type) + " yet");
+            qWarning() << errorString();
             return false;
         }
     }

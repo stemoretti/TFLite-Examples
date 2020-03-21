@@ -41,6 +41,14 @@ AppStackPage {
         }
     }
 
+    Connections {
+        target: Settings
+        onClassifierModelChanged: {
+            if (!videoFilter.active)
+                videoFilter.active = true
+        }
+    }
+
     VideoFilter {
         id: videoFilter
 
@@ -130,8 +138,6 @@ AppStackPage {
     }
 
     Rectangle {
-        id: modelMessage
-
         visible: imageClassification.errorString.length > 0
 
         x: (parent.width - width) / 2
@@ -139,36 +145,30 @@ AppStackPage {
         implicitWidth: appWindow.width * (isPortrait ? 0.9 : 0.6)
         implicitHeight: Math.min(messageLabel.implicitHeight, appWindow.height * 0.9)
 
-        color: "red"
+        color: "darkred"
         opacity: 0.7
-        border.color: "darkred"
+        border.color: "red"
         border.width: 2
         radius: 10
 
         LabelSubheading {
             id: messageLabel
 
-            property string message:
-                qsTr("<br>Please download an image classification model from " +
-                     "<a href='https://www.tensorflow.org/lite/models/image_classification/overview'>" +
-                     "www.tensorflow.org/lite/models/image_classification/overview</a>, " +
-                     "then load it in the settings page.")
-
             anchors.fill: parent
             topPadding: 20
             bottomPadding: 20
             leftPadding: 8
             rightPadding: 8
-            text: imageClassification.errorString + "<br>" +
-                  (Settings.classifierModel.length > 0 ?
-                       qsTr("Invalid model file.") :
-                       qsTr("Model filename empty.")) +
-                  message
+            text: qsTr("Error loading model file:<br><br>") +
+                  imageClassification.errorString + qsTr(
+                      "<br><br>Please download a compatible image classification model from " +
+                      "<a href='https://www.tensorflow.org/lite/models/image_classification/overview'>" +
+                      "www.tensorflow.org/lite/models/image_classification/overview</a>, " +
+                      "then load it in the settings page.")
             color: "white"
-            opacity: 1.0
+            textFormat: "RichText"
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
-            linkColor: isDarkTheme ? "lightblue" : "blue"
             onLinkActivated: Qt.openUrlExternally(link)
         }
     }
