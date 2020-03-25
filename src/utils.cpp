@@ -6,7 +6,10 @@
 
 #include <algorithm>
 
-QImage Utils::rotateImage(QImage img, double rotation)
+namespace Utils
+{
+
+QImage rotateImage(QImage img, double rotation)
 {
     QPoint center = img.rect().center();
     QMatrix matrix;
@@ -16,7 +19,7 @@ QImage Utils::rotateImage(QImage img, double rotation)
     return img.transformed(matrix);
 }
 
-QStringList Utils::readLabels(const QString &filename)
+QStringList readLabels(const QString &filename)
 {
     QStringList labels;
 
@@ -36,4 +39,6 @@ QStringList Utils::readLabels(const QString &filename)
     }
 
     return labels;
+}
+
 }

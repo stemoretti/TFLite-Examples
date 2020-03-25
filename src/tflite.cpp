@@ -2,24 +2,7 @@
 
 #include <QThread>
 
-#include "tensorflow/lite/error_reporter.h"
-
 using namespace tflite;
-
-class Error : public ErrorReporter {
-public:
-    explicit Error(QString *error) : m_error(error) {}
-
-    int Report(const char *format, va_list args) override {
-        *m_error = QString::vasprintf(format, args);
-        va_end(args);
-
-        return 0;
-    }
-
-private:
-    QString *m_error;
-};
 
 TFLiteBase::TFLiteBase(QObject *parent)
     : QObject(parent)
@@ -31,6 +14,7 @@ TFLiteBase::TFLiteBase(QObject *parent)
     connect(this, &TFLiteBase::modelFileChanged, this, &TFLiteBase::queueInit);
     connect(this, &TFLiteBase::threadsChanged, this, &TFLiteBase::queueInit);
     connect(this, &TFLiteBase::accelerationChanged, this, &TFLiteBase::queueInit);
+    connect(&m_error, &Error::notifyError, this, &TFLiteBase::setErrorString);
 }
 
 void TFLiteBase::queueInit()
@@ -50,13 +34,9 @@ bool TFLiteBase::initialize()
         return false;
     }
 
-    QString errorMessage;
-    Error error(&errorMessage);
-
-    m_model = FlatBufferModel::BuildFromFile(m_modelFile.toUtf8(), &error);
+    m_model = FlatBufferModel::BuildFromFile(m_modelFile.toUtf8(), &m_error);
 
     if (m_model == nullptr) {
-        setErrorString(errorMessage);
         qWarning() << errorString();
         m_initialized = false;
         return false;

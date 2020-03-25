@@ -26,6 +26,9 @@ AppStackPage {
         }
     ]
 
+    // If the video output source is set in the component the camera will fail
+    // to load properly.
+    // To get around this problem the video output source is set after a delay.
     Component.onCompleted: {
         loadCamera.start()
     }
@@ -33,7 +36,6 @@ AppStackPage {
     Timer {
         id: loadCamera
 
-        repeat: false
         interval: 300
         onTriggered: {
             vout.source = camera

@@ -9,6 +9,22 @@
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/kernels/register.h"
+#include "tensorflow/lite/error_reporter.h"
+
+class Error : public QObject, public tflite::ErrorReporter {
+    Q_OBJECT
+
+public:
+    int Report(const char *format, va_list args) override {
+        emit notifyError(QString::vasprintf(format, args));
+        va_end(args);
+
+        return 0;
+    }
+
+Q_SIGNALS:
+    void notifyError(QString error);
+};
 
 class TFLiteBase : public QObject
 {
@@ -46,6 +62,7 @@ protected:
     std::unique_ptr<tflite::Interpreter> m_interpreter;
     std::unique_ptr<tflite::FlatBufferModel> m_model;
     tflite::ops::builtin::BuiltinOpResolver m_resolver;
+    Error m_error;
 
 private:
     Q_DISABLE_COPY(TFLiteBase)
