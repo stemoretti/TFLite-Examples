@@ -133,27 +133,27 @@
         <translation>Classificazione Immagini</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="118"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="120"/>
         <source>Pause inference</source>
         <translation>Ferma inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="118"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="120"/>
         <source>Resume inference</source>
         <translation>Riprendi inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="122"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="124"/>
         <source>Select camera</source>
         <translation>Seleziona camera</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="162"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="164"/>
         <source>Error loading model file:&lt;br&gt;&lt;br&gt;</source>
         <translation>Errore caricamento del modello:&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="163"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="165"/>
         <source>&lt;br&gt;&lt;br&gt;Please download a compatible image classification model from &lt;a href=&apos;https://www.tensorflow.org/lite/models/image_classification/overview&apos;&gt;www.tensorflow.org/lite/models/image_classification/overview&lt;/a&gt;, then load it in the settings page.</source>
         <translation>&lt;br&gt;&lt;br&gt;Scarica un modello di classificazione immagini compatibile da &lt;a href=&apos;https://www.tensorflow.org/lite/models/image_classification/overview&apos;&gt;www.tensorflow.org/lite/models/image_classification/overview&lt;/a&gt;, poi caricalo nella pagina delle impostazioni.</translation>
     </message>
@@ -166,27 +166,27 @@
         <translation>Rivelamento Oggetti</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="139"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="142"/>
         <source>Pause inference</source>
         <translation>Ferma inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="139"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="142"/>
         <source>Resume inference</source>
         <translation>Riprendi inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="143"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="146"/>
         <source>Select camera</source>
         <translation>Seleziona camera</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="183"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="186"/>
         <source>Error loading model file:&lt;br&gt;&lt;br&gt;</source>
         <translation>Errore caricamento del modello:&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="184"/>
+        <location filename="../qml/pages/ObjectDetectionPage.qml" line="187"/>
         <source>&lt;br&gt;&lt;br&gt;Please download a compatible object detection model from &lt;a href=&apos;https://www.tensorflow.org/lite/models/object_detection/overview&apos;&gt;www.tensorflow.org/lite/models/object_detection/overview&lt;/a&gt;, then load it in the settings page.</source>
         <translation>&lt;br&gt;&lt;br&gt;Scarica un modello di rilevamento oggetti compatibile da &lt;a href=&apos;https://www.tensorflow.org/lite/models/object_detection/overview&apos;&gt;www.tensorflow.org/lite/models/object_detection/overview&lt;/a&gt;, poi caricalo nella pagina delle impostazioni.</translation>
     </message>

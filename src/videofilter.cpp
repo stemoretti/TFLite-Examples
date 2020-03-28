@@ -128,8 +128,8 @@ VideoFilterRunnable::VideoFilterRunnable(VideoFilter *filter)
 }
 
 QVideoFrame VideoFilterRunnable::run(QVideoFrame *input,
-                                      const QVideoSurfaceFormat &surfaceFormat,
-                                      RunFlags flags)
+                                     const QVideoSurfaceFormat &surfaceFormat,
+                                     RunFlags flags)
 {
     Q_UNUSED(flags)
     Q_UNUSED(surfaceFormat)
@@ -140,25 +140,26 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input,
     if (m_filter->m_processThread.isRunning() || !m_filter->m_tflite)
         return *input;
 
+    m_frame.copyData(input);
+
     m_filter->m_processThread
             = QtConcurrent::run(this,
                                 &VideoFilterRunnable::processVideoFrame,
-                                SimpleVideoFrame(input),
                                 -m_filter->m_orientation);
 
     return *input;
 }
 
-void VideoFilterRunnable::processVideoFrame(SimpleVideoFrame &frame, int orientation)
+void VideoFilterRunnable::processVideoFrame(int orientation)
 {
-    if (frame.dataSize < 1) {
+    if (m_frame.dataSize < 1) {
         qDebug() << "VideoFilterRunnable: Buffer is empty";
         return;
     }
 
-    int width = frame.size.width();
-    int height = frame.size.height();
-    const uchar *data = frame.data.get();
+    int width = m_frame.size.width();
+    int height = m_frame.size.height();
+    const uchar *data = m_frame.data.get();
 
     uchar *rgb;
     int wh;
@@ -167,7 +168,7 @@ void VideoFilterRunnable::processVideoFrame(SimpleVideoFrame &frame, int orienta
 
     QImage image;
 
-    switch (frame.pixelFormat) {
+    switch (m_frame.pixelFormat) {
     case QVideoFrame::Format_RGB32:
     case QVideoFrame::Format_ARGB32:
         image = argb_data_to_image(data, width, height, 0, 1, 2, 3);
@@ -226,7 +227,7 @@ void VideoFilterRunnable::processVideoFrame(SimpleVideoFrame &frame, int orienta
         break;
         /// TODO: Handle (create QImages from) YUV formats.
     default:
-        QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat);
+        QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(m_frame.pixelFormat);
         image = QImage(data, width, height, imageFormat);
         break;
     }
@@ -234,8 +235,8 @@ void VideoFilterRunnable::processVideoFrame(SimpleVideoFrame &frame, int orienta
     if (image.isNull()) {
         qDebug() << "VideoFilterRunnable error: Cannot create image file to process.";
         qDebug() << "Maybe it was a format conversion problem? ";
-        qDebug() << "VideoFrame format: " << frame.pixelFormat;
-        qDebug() << "Image corresponding format: " << QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat);
+        qDebug() << "VideoFrame format: " << m_frame.pixelFormat;
+        qDebug() << "Image corresponding format: " << QVideoFrame::imageFormatFromPixelFormat(m_frame.pixelFormat);
         return;
     }
 

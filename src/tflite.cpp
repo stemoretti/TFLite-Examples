@@ -14,7 +14,6 @@ TFLiteBase::TFLiteBase(QObject *parent)
     connect(this, &TFLiteBase::modelFileChanged, this, &TFLiteBase::queueInit);
     connect(this, &TFLiteBase::threadsChanged, this, &TFLiteBase::queueInit);
     connect(this, &TFLiteBase::accelerationChanged, this, &TFLiteBase::queueInit);
-    connect(&m_error, &Error::notifyError, this, &TFLiteBase::setErrorString);
 }
 
 void TFLiteBase::queueInit()
@@ -37,6 +36,7 @@ bool TFLiteBase::initialize()
     m_model = FlatBufferModel::BuildFromFile(m_modelFile.toUtf8(), &m_error);
 
     if (m_model == nullptr) {
+        setErrorString("TensorFlow model not valid");
         qWarning() << errorString();
         m_initialized = false;
         return false;

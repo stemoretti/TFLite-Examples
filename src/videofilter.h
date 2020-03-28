@@ -10,11 +10,15 @@ template <typename T> class TFLite;
 
 struct SimpleVideoFrame
 {
-    SimpleVideoFrame(QVideoFrame *frame) {
+    SimpleVideoFrame() : dataSize(0) {}
+
+    void copyData(QVideoFrame *frame) {
         frame->map(QAbstractVideoBuffer::ReadOnly);
 
-        dataSize = frame->mappedBytes();
-        data.reset(new uchar[dataSize]);
+        if (frame->mappedBytes() != dataSize) {
+            dataSize = frame->mappedBytes();
+            data.reset(new uchar[dataSize]);
+        }
         memcpy(data.get(), frame->bits(), dataSize);
         size = frame->size();
         pixelFormat = frame->pixelFormat();
@@ -42,7 +46,7 @@ public:
     explicit VideoFilter(QObject *parent = nullptr);
     ~VideoFilter();
 
-    QVideoFilterRunnable *createFilterRunnable();
+    QVideoFilterRunnable *createFilterRunnable() override;
 
     TFLiteBase *tflite();
     void setTflite(TFLiteBase *tflite);
@@ -65,11 +69,12 @@ class VideoFilterRunnable : public QVideoFilterRunnable
 public:
     explicit VideoFilterRunnable(VideoFilter *filter);
 
-    QVideoFrame run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags);
-    void processVideoFrame(SimpleVideoFrame &frame, int orientation);
+    QVideoFrame run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags) override;
+    void processVideoFrame(int orientation);
 
 private:
     VideoFilter *m_filter;
+    SimpleVideoFrame m_frame;
 };
 
 #endif // VIDEOFILTER_H
