@@ -18,6 +18,7 @@
 #include "tflite.h"
 #include "objectdetection.h"
 #include "imageclassification.h"
+#include "poseestimation.h"
 
 int main(int argc, char *argv[])
 {
@@ -62,6 +63,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<TFLiteBase>();
     qmlRegisterType<ObjectDetection>("ObjectDetection", 1, 0, "ObjectDetection");
     qmlRegisterType<ImageClassification>("ImageClassification", 1, 0, "ImageClassification");
+    qmlRegisterType<PoseEstimation>("PoseEstimation", 1, 0, "PoseEstimation");
 
     // FIXME: Instantiate the class to run the constructor
     AppData::instance();

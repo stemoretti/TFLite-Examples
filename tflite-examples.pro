@@ -11,6 +11,7 @@ HEADERS += \
     src/iconprovider.h \
     src/imageclassification.h \
     src/objectdetection.h \
+    src/poseestimation.h \
     src/settings.h \
     src/appdata.h \
     src/system.h \
@@ -25,6 +26,7 @@ SOURCES += \
     src/iconprovider.cpp \
     src/imageclassification.cpp \
     src/objectdetection.cpp \
+    src/poseestimation.cpp \
     src/settings.cpp \
     src/appdata.cpp \
     src/system.cpp \

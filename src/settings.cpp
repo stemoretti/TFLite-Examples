@@ -24,6 +24,7 @@ Settings::Settings(QObject *parent)
     , m_threads(QThread::idealThreadCount())
     , m_confidence(0.6)
     , m_threshold(0.001)
+    , m_score(0.6)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 }
@@ -88,6 +89,8 @@ void Settings::readSettingsFile()
     setClassifierModel(jobj["classifierModel"].toString());
     setClassifierLabels(jobj["classifierLabels"].toString());
     setThreshold(jobj["threshold"].toString().toFloat());
+    setPoseModel(jobj["poseModel"].toString());
+    setScore(jobj["score"].toString().toFloat());
 
     qDebug() << "Settings file read";
 }
@@ -118,6 +121,8 @@ void Settings::writeSettingsFile() const
     jobj["classifierModel"] = m_classifierModel;
     jobj["classifierLabels"] = m_classifierLabels;
     jobj["threshold"] = QString::number(m_threshold, 'f', 3);
+    jobj["poseModel"] = m_poseModel;
+    jobj["score"] = QString::number(m_score, 'f', 2);
     writeFile.write(QJsonDocument(jobj).toJson());
     writeFile.close();
 
@@ -334,6 +339,34 @@ void Settings::setThreshold(float threshold)
 
     m_threshold = threshold;
     emit thresholdChanged(m_threshold);
+}
+
+QString Settings::poseModel() const
+{
+    return m_poseModel;
+}
+
+void Settings::setPoseModel(const QString &poseModel)
+{
+    if (m_poseModel == poseModel)
+        return;
+
+    m_poseModel = poseModel;
+    emit poseModelChanged(m_poseModel);
+}
+
+float Settings::score() const
+{
+    return m_score;
+}
+
+void Settings::setScore(float score)
+{
+    if (qFuzzyCompare(m_score, score))
+        return;
+
+    m_score = score;
+    emit scoreChanged(m_score);
 }
 
 //}}} Properties getters/setters definitions

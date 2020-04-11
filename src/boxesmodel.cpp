@@ -51,7 +51,7 @@ QHash<int, QByteArray> BoxesModel::roleNames() const
 
 void BoxesModel::reset(const QList<QRectF> &boxes,
                        const QStringList &labels,
-                       const QList<double> &confidences)
+                       const QList<float> &confidences)
 {
     beginResetModel();
 

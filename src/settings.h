@@ -27,6 +27,8 @@ class Settings : public QObject
     Q_PROPERTY(QString classifierModel READ classifierModel WRITE setClassifierModel NOTIFY classifierModelChanged)
     Q_PROPERTY(QString classifierLabels READ classifierLabels WRITE setClassifierLabels NOTIFY classifierLabelsChanged)
     Q_PROPERTY(float threshold READ threshold WRITE setThreshold NOTIFY thresholdChanged)
+    Q_PROPERTY(QString poseModel READ poseModel WRITE setPoseModel NOTIFY poseModelChanged)
+    Q_PROPERTY(float score READ score WRITE setScore NOTIFY scoreChanged)
 
 public:
     ~Settings();
@@ -84,6 +86,12 @@ public:
     float threshold() const;
     void setThreshold(float threshold);
 
+    QString poseModel() const;
+    void setPoseModel(const QString &poseModel);
+
+    float score() const;
+    void setScore(float score);
+
     //}}} Properties getters/setters declarations
 
 Q_SIGNALS:
@@ -104,6 +112,8 @@ Q_SIGNALS:
     void classifierModelChanged(QString classifierModel);
     void classifierLabelsChanged(QString classifierLabels);
     void thresholdChanged(float threshold);
+    void poseModelChanged(QString poseModel);
+    void scoreChanged(float threshold);
 
     //}}} Properties signals
 
@@ -130,6 +140,8 @@ private:
     QString m_classifierModel;
     QString m_classifierLabels;
     float m_threshold;
+    QString m_poseModel;
+    float m_score;
 
     //}}} Properties declarations
 };

@@ -11,13 +11,14 @@ template <typename T> class TFLite;
 struct SimpleVideoFrame
 {
     SimpleVideoFrame() : dataSize(0) {}
+    Q_DISABLE_COPY(SimpleVideoFrame)
 
     void copyData(QVideoFrame *frame) {
         frame->map(QAbstractVideoBuffer::ReadOnly);
 
         if (frame->mappedBytes() != dataSize) {
             dataSize = frame->mappedBytes();
-            data.reset(new uchar[dataSize]);
+            data = std::make_unique<uchar[]>(dataSize);
         }
         memcpy(data.get(), frame->bits(), dataSize);
         size = frame->size();
@@ -26,7 +27,7 @@ struct SimpleVideoFrame
         frame->unmap();
     }
 
-    std::shared_ptr<uchar> data;
+    std::unique_ptr<uchar[]> data;
     int dataSize;
     QSize size;
     QVideoFrame::PixelFormat pixelFormat;
@@ -70,7 +71,7 @@ public:
     explicit VideoFilterRunnable(VideoFilter *filter);
 
     QVideoFrame run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags) override;
-    void processVideoFrame(int orientation);
+    void processVideoFrame(int orientation, QRect captureRect);
 
 private:
     VideoFilter *m_filter;

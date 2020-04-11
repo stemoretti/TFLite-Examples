@@ -10,7 +10,7 @@ struct Box {
     QRectF rect;
     QString name;
     int color;
-    double confidence;
+    float confidence;
 };
 
 class BoxesModel : public QAbstractListModel
@@ -33,7 +33,7 @@ public:
 
     void reset(const QList<QRectF> &boxes = QList<QRectF>(),
                const QStringList &labels = QStringList(),
-               const QList<double> &confidences = QList<double>());
+               const QList<float> &confidences = QList<float>());
 
 private:
     QList<Box> m_boxes;

@@ -88,8 +88,8 @@ void ImageClassification::postProcessing()
                            output_size, num_results, m_threshold, &top_results, false);
         break;
     default:
-        qDebug() << "Cannot handle output type"
-                 << m_interpreter->tensor(output)->type << "yet";
+        qWarning() << "Cannot handle output type"
+                   << m_interpreter->tensor(output)->type << "yet";
         return;
     }
 

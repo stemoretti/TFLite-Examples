@@ -27,13 +27,12 @@ public:
 
 Q_SIGNALS:
     void results(const QList<QRectF> &boxes,
-                 const QStringList &names,
-                 const QList<double> &confidences);
+                 const QStringList &captions,
+                 const QList<float> &confidences);
 
     void labelsFileChanged(const QString &labelsFile);
     void contentSizeChanged(QSize contentSize);
-    void orientationChanged(int orientation);
-    void confidenceChanged(double confidence);
+    void confidenceChanged(float confidence);
 
 private:
     std::vector<TfLiteTensor *> m_outputs;

@@ -143,6 +143,19 @@ AppStackPage {
                     subtitle: (Settings.threshold * 100).toFixed(1) + " %"
                     onClicked: thresholdPopup.open()
                 }
+
+                SettingsItem {
+                    title: qsTr("Pose estimation model")
+                    subtitle: Settings.poseModel.replace(/.*\//, "")
+                    placeholderText: qsTr("No file selected")
+                    onClicked: push(fileChooserComponent, { "option": "poseModel" })
+                }
+
+                SettingsItem {
+                    title: qsTr("Minimum score")
+                    subtitle: Math.round(Settings.score * 100) + " %"
+                    onClicked: scorePopup.open()
+                }
             }
         }
     }
@@ -273,6 +286,35 @@ AppStackPage {
 
             valueFromText: function(text, locale) {
                 return Number.fromLocaleString(locale, text) * 10
+            }
+        }
+    }
+
+    BaseModalPopup {
+        id: scorePopup
+
+        onClosed: Settings.score = scoreSpin.value / 100
+
+        SpinBox {
+            id: scoreSpin
+
+            anchors.centerIn: parent
+            from: 1
+            value: Math.round(Settings.score * 100)
+            to: 100
+            stepSize: 1
+
+            validator: IntValidator {
+                bottom: scoreSpin.from
+                top: scoreSpin.to
+            }
+
+            textFromValue: function(value, locale) {
+                return value + " %"
+            }
+
+            valueFromText: function(text, locale) {
+                return Number.fromLocaleString(locale, text)
             }
         }
     }

@@ -51,7 +51,7 @@ QImage IconProvider::requestImage(const QString &id, QSize *size, const QSize &r
     QFontMetrics fontMetrics(font);
     double widthRatio = double(width) / fontMetrics.boundingRect(iconChar).width();
     if (widthRatio < 1.0)
-        font.setPixelSize(int(font.pixelSize() * widthRatio));
+        font.setPixelSize(font.pixelSize() * widthRatio);
 
     QPainter painter(&image);
     painter.setFont(font);

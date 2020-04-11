@@ -192,6 +192,39 @@
     </message>
 </context>
 <context>
+    <name>PoseEstimationPage</name>
+    <message>
+        <location filename="../qml/pages/PoseEstimationPage.qml" line="15"/>
+        <source>Pose Estimation</source>
+        <translation>Stima della Posa</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PoseEstimationPage.qml" line="168"/>
+        <source>Pause inference</source>
+        <translation>Ferma inferenza</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PoseEstimationPage.qml" line="168"/>
+        <source>Resume inference</source>
+        <translation>Riprendi inferenza</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PoseEstimationPage.qml" line="172"/>
+        <source>Select camera</source>
+        <translation>Seleziona camera</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PoseEstimationPage.qml" line="212"/>
+        <source>Error loading model file:&lt;br&gt;&lt;br&gt;</source>
+        <translation>Errore caricamento del modello:&lt;br&gt;&lt;br&gt;</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/PoseEstimationPage.qml" line="213"/>
+        <source>&lt;br&gt;&lt;br&gt;Please download a compatible pose estimation model from &lt;a href=&apos;https://www.tensorflow.org/lite/models/pose_estimation/overview&apos;&gt;www.tensorflow.org/lite/models/pose_estimation/overview&lt;/a&gt;, then load it in the settings page.</source>
+        <translation>&lt;br&gt;&lt;br&gt;Scarica un modello di stima della posa compatibile da &lt;a href=&apos;https://www.tensorflow.org/lite/models/pose_estimation/overview&apos;&gt;www.tensorflow.org/lite/models/pose_estimation/overview&lt;/a&gt;, poi caricalo nella pagina delle impostazioni.</translation>
+    </message>
+</context>
+<context>
     <name>SettingsContinentsPage</name>
     <message>
         <location filename="../qml/pages/SettingsContinentsPage.qml" line="8"/>
@@ -269,6 +302,7 @@
         <location filename="../qml/pages/SettingsPage.qml" line="115"/>
         <location filename="../qml/pages/SettingsPage.qml" line="130"/>
         <location filename="../qml/pages/SettingsPage.qml" line="137"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="150"/>
         <source>No file selected</source>
         <translation>Nessun file selezionato</translation>
     </message>
@@ -298,6 +332,16 @@
         <translation>Soglia per classificazione</translation>
     </message>
     <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="148"/>
+        <source>Pose estimation model</source>
+        <translation>Modello stima della posa</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/SettingsPage.qml" line="155"/>
+        <source>Minimum score</source>
+        <translation>Soglia minima per posa</translation>
+    </message>
+    <message>
         <location filename="../qml/pages/SettingsPage.qml" line="79"/>
         <source>Show inference time</source>
         <translation>Visualizza durata inferenza</translation>
@@ -316,12 +360,17 @@
         <translation>Classificazione Immagini</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="113"/>
+        <location filename="../qml/main.qml" line="93"/>
+        <source>Pose Estimation</source>
+        <translation>Stima della Posa</translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="118"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="118"/>
+        <location filename="../qml/main.qml" line="123"/>
         <source>About</source>
         <translation>Informazioni App</translation>
     </message>

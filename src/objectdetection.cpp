@@ -6,36 +6,6 @@
 
 using namespace tflite;
 
-// https://github.com/YijinLiu/tf-cpu/blob/master/benchmark/obj_detect_lite.cc
-template<typename T>
-T* TensorData(TfLiteTensor* tensor, int batch_index);
-
-template<>
-float* TensorData(TfLiteTensor* tensor, int batch_index) {
-    int nelems = 1;
-    for (int i = 1; i < tensor->dims->size; i++) nelems *= tensor->dims->data[i];
-    switch (tensor->type) {
-        case kTfLiteFloat32:
-            return tensor->data.f + nelems * batch_index;
-        default:
-            qDebug() << "Should not reach here!";
-    }
-    return nullptr;
-}
-
-template<>
-uint8_t* TensorData(TfLiteTensor* tensor, int batch_index) {
-    int nelems = 1;
-    for (int i = 1; i < tensor->dims->size; i++) nelems *= tensor->dims->data[i];
-    switch (tensor->type) {
-        case kTfLiteUInt8:
-            return tensor->data.uint8 + nelems * batch_index;
-        default:
-            qDebug() << "Should not reach here!";
-    }
-    return nullptr;
-}
-
 ObjectDetection::ObjectDetection(QObject *parent)
     : TFLite<QImage>(parent)
     , m_boxes(new BoxesModel(this))
@@ -107,13 +77,13 @@ bool ObjectDetection::preProcessing(const QImage &input)
 void ObjectDetection::postProcessing()
 {
     QStringList captions;
-    QList<double> confidences;
+    QList<float> confidences;
     QList<QRectF> boxes;
 
-    int    num_detections    = *TensorData<float>(m_outputs[3], 0);
-    float *detection_classes =  TensorData<float>(m_outputs[1], 0);
-    float *detection_scores  =  TensorData<float>(m_outputs[2], 0);
-    float *detection_boxes   =  TensorData<float>(m_outputs[0], 0);
+    int    num_detections    = *Utils::TensorData<float>(m_outputs[3], 0);
+    float *detection_classes =  Utils::TensorData<float>(m_outputs[1], 0);
+    float *detection_scores  =  Utils::TensorData<float>(m_outputs[2], 0);
+    float *detection_boxes   =  Utils::TensorData<float>(m_outputs[0], 0);
 
     for (int i = 0; i < num_detections; ++i) {
         int cls = detection_classes[i] + 1;
@@ -128,12 +98,15 @@ void ObjectDetection::postProcessing()
 
         QString label = (cls >= 0 && cls < m_labels.size()) ? m_labels[cls] : "";
 
-        float top    = detection_boxes[4 * i] * m_contentSize.height();
-        float left   = detection_boxes[4 * i + 1] * m_contentSize.width();
-        float bottom = detection_boxes[4 * i + 2] * m_contentSize.height();
-        float right  = detection_boxes[4 * i + 3] * m_contentSize.width();
+        float top = std::max(detection_boxes[4 * i], 0.0f);
+        float left = std::max(detection_boxes[4 * i + 1], 0.0f);
+        float height = std::min(detection_boxes[4 * i + 2], 1.0f) - top;
+        float width = std::min(detection_boxes[4 * i + 3], 1.0f) - left;
 
-        QRectF box(left, top, right - left, bottom - top);
+        QRectF box(left * m_contentSize.width(),
+                   top * m_contentSize.height(),
+                   width * m_contentSize.width(),
+                   height * m_contentSize.height());
 
         captions.append(label);
         confidences.append(score);

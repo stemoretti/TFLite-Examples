@@ -88,6 +88,11 @@ App {
                             text: qsTr("Image Classification")
                             page: "pages/ImageClassificationPage.qml"
                         }
+                        ListElement {
+                            iconUrl: "image://icon/directions_walk"
+                            text: qsTr("Pose Estimation")
+                            page: "pages/PoseEstimationPage.qml"
+                        }
                     }
 
                     delegate: ItemDelegate {

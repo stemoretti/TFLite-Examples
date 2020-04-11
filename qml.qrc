@@ -27,5 +27,6 @@
         <file>qml/pages/SettingsCountriesPage.qml</file>
         <file>qml/pages/FileChooserPage.qml</file>
         <file>qml/pages/ImageClassificationPage.qml</file>
+        <file>qml/pages/PoseEstimationPage.qml</file>
     </qresource>
 </RCC>

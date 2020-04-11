@@ -12,6 +12,8 @@ Features
 
 * Image Classification
 
+* Pose Estimation
+
 Credits
 -------
 
