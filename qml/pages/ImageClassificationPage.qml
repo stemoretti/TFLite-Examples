@@ -63,6 +63,9 @@ AppStackPage {
             acceleration: Settings.nnapi
             threads: Settings.threads
             threshold: Settings.threshold
+            onResults: {
+                captionsList.model = captions
+            }
         }
     }
 
@@ -76,12 +79,13 @@ AppStackPage {
     }
 
     ListView {
+        id: captionsList
+
         anchors { left: parent.left; right: parent.right; margins: 10 }
         y: parent.height - contentHeight
         height: contentHeight
         interactive: false
         visible: videoFilter.active
-        model: imageClassification.captions
         delegate: LabelTitle {
             anchors.horizontalCenter: parent.horizontalCenter
             color: "white"

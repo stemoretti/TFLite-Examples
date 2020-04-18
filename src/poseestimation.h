@@ -42,6 +42,7 @@ public:
 
 Q_SIGNALS:
     void results(const QVariantList &keypoints, const QVariantList &scores);
+
     void contentSizeChanged(QSize contentSize);
     void scoreChanged(float score);
 

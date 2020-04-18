@@ -57,7 +57,6 @@ bool ImageClassification::preProcessing(const QImage &input)
         default:
             setErrorString("Cannot handle input type " +
                            QString::number(m_interpreter->tensor(input)->type) + " yet");
-            qWarning() << errorString();
             return false;
         }
     }
@@ -88,27 +87,23 @@ void ImageClassification::postProcessing()
                            output_size, num_results, m_threshold, &top_results, false);
         break;
     default:
-        qWarning() << "Cannot handle output type"
-                   << m_interpreter->tensor(output)->type << "yet";
+        setErrorString("Cannot handle output type " +
+                       QString::number(m_interpreter->tensor(output)->type) + " yet");
         return;
     }
 
     if (top_results.empty())
         return;
 
-    m_captions.clear();
+    QVariantList captions;
     for (const auto &result : top_results) {
         QJsonObject jobj;
         jobj.insert("caption",
                     (result.second >= 0 && result.second < m_labels.size()) ?
                         m_labels[result.second] : "");
         jobj.insert("confidence", result.first);
-        m_captions.append(jobj);
+        captions.append(jobj);
     }
-    emit captionsChanged(m_captions);
-}
 
-QVariantList ImageClassification::captions() const
-{
-    return m_captions;
+    emit results(captions);
 }

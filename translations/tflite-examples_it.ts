@@ -133,27 +133,27 @@
         <translation>Classificazione Immagini</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="120"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="124"/>
         <source>Pause inference</source>
         <translation>Ferma inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="120"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="124"/>
         <source>Resume inference</source>
         <translation>Riprendi inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="124"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="128"/>
         <source>Select camera</source>
         <translation>Seleziona camera</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="164"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="168"/>
         <source>Error loading model file:&lt;br&gt;&lt;br&gt;</source>
         <translation>Errore caricamento del modello:&lt;br&gt;&lt;br&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="165"/>
+        <location filename="../qml/pages/ImageClassificationPage.qml" line="169"/>
         <source>&lt;br&gt;&lt;br&gt;Please download a compatible image classification model from &lt;a href=&apos;https://www.tensorflow.org/lite/models/image_classification/overview&apos;&gt;www.tensorflow.org/lite/models/image_classification/overview&lt;/a&gt;, then load it in the settings page.</source>
         <translation>&lt;br&gt;&lt;br&gt;Scarica un modello di classificazione immagini compatibile da &lt;a href=&apos;https://www.tensorflow.org/lite/models/image_classification/overview&apos;&gt;www.tensorflow.org/lite/models/image_classification/overview&lt;/a&gt;, poi caricalo nella pagina delle impostazioni.</translation>
     </message>
@@ -302,7 +302,7 @@
         <location filename="../qml/pages/SettingsPage.qml" line="115"/>
         <location filename="../qml/pages/SettingsPage.qml" line="130"/>
         <location filename="../qml/pages/SettingsPage.qml" line="137"/>
-        <location filename="../qml/pages/SettingsPage.qml" line="150"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="152"/>
         <source>No file selected</source>
         <translation>Nessun file selezionato</translation>
     </message>
@@ -332,12 +332,12 @@
         <translation>Soglia per classificazione</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="148"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="150"/>
         <source>Pose estimation model</source>
         <translation>Modello stima della posa</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="155"/>
+        <location filename="../qml/pages/SettingsPage.qml" line="157"/>
         <source>Minimum score</source>
         <translation>Soglia minima per posa</translation>
     </message>

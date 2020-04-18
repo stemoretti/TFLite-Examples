@@ -2,13 +2,15 @@
 
 #include <QDebug>
 
+#include <cmath>
+
 #include "utils.h"
 
 using namespace tflite;
 
 PoseEstimation::PoseEstimation(QObject *parent)
     : TFLite<QImage>(parent)
-    , m_score(0.6)
+    , m_score(0.5)
 {
 }
 
@@ -25,7 +27,6 @@ bool PoseEstimation::customInitStep()
 
     if (m_interpreter->outputs().size() != 4) {
         setErrorString("Graph needs to have exactly 4 outputs");
-        qWarning() << errorString();
         return false;
     }
 
@@ -57,7 +58,6 @@ bool PoseEstimation::preProcessing(const QImage &input)
         default:
             setErrorString("Cannot handle input type " +
                            QString::number(m_interpreter->tensor(input)->type) + " yet");
-            qWarning() << errorString();
             return false;
         }
     }
@@ -70,15 +70,15 @@ void PoseEstimation::postProcessing()
     QVariantList keypoints;
     QVariantList scores;
 
-    float *heatmaps = Utils::TensorData<float>(m_outputs[0], 0);
-    float *offsets = Utils::TensorData<float>(m_outputs[1], 0);
+    TfLiteTensor *heatmaps = m_outputs[0];
+    TfLiteTensor *offsets = m_outputs[1];
 #if 0
     float *displacements_fwd = Utils::TensorData<float>(m_outputs[2], 0);
     float *displacements_bwd = Utils::TensorData<float>(m_outputs[3], 0);
 #endif
 
     if (m_outputs[0]->dims->size < 4) {
-        qWarning() << "Unsupported model";
+        setErrorString("Unsupported model heatmaps number");
         return;
     }
 
@@ -87,31 +87,35 @@ void PoseEstimation::postProcessing()
     int num_key = m_outputs[0]->dims->data[3];
 
     for (int keypoint = 0; keypoint < num_key; keypoint++) {
-        float max_val = *heatmaps;
+        float max_val = 0.0f;
         int maxrow = 0;
         int maxcol = 0;
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                int point = heatmaps[row * (width * num_key) + col * num_key + keypoint];
-                if (point > max_val) {
-                    max_val = point;
+                float *point = Utils::TensorData<float>(heatmaps, { row, col, keypoint });
+                if (point && *point > max_val) {
+                    max_val = *point;
                     maxrow = row;
                     maxcol = col;
                 }
             }
         }
         keypoints.append(QPoint(maxcol, maxrow));
-        scores.append(max_val);
+        scores.append(1.0f / (1.0f + std::exp(-max_val)));
     }
 
     for (int i = 0; i < num_key; i++) {
-        int x = keypoints[i].toPoint().x();
-        int y = keypoints[i].toPoint().y();
-        float offsetX = offsets[y * (width * num_key * 2) + x * (num_key * 2) + num_key + i];
-        float offsetY = offsets[y * (width * num_key * 2) + x * (num_key * 2) + i];
         QPoint point = keypoints[i].toPoint();
-        point.setX((x / float(width - 1) + offsetX / wanted_width) * m_contentSize.width());
-        point.setY((y / float(height - 1) + offsetY / wanted_height) * m_contentSize.height());
+        int x = point.x();
+        int y = point.y();
+        float *offsetX = Utils::TensorData<float>(offsets, { y, x, num_key + i });
+        float *offsetY = Utils::TensorData<float>(offsets, { y, x, i });
+        if (!offsetX || !offsetY) {
+            setErrorString("Undefined pointer to offset");
+            return;
+        }
+        point.setX((x / float(width - 1) + *offsetX / wanted_width) * m_contentSize.width());
+        point.setY((y / float(height - 1) + *offsetY / wanted_height) * m_contentSize.height());
         keypoints[i] = point;
     }
 

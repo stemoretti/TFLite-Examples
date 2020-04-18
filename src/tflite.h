@@ -82,7 +82,6 @@ public:
 
         if (m_interpreter->Invoke() != kTfLiteOk) {
             setErrorString("Failed to invoke interpreter");
-            qWarning() << errorString();
             return false;
         }
 

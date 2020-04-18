@@ -100,9 +100,8 @@ void resize(T* out, QImage image,
 //    img.save(System::dataRoot() + "/test.jpg");
 }
 
-// https://github.com/YijinLiu/tf-cpu/blob/master/benchmark/obj_detect_lite.cc
 template<typename T>
-T* TensorData(TfLiteTensor* tensor, int batch_index);
+T *TensorData(TfLiteTensor *tensor, std::vector<int> indices = {});
 
 }
 

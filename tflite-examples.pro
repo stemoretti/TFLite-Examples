@@ -13,7 +13,6 @@ HEADERS += \
     src/objectdetection.h \
     src/poseestimation.h \
     src/settings.h \
-    src/appdata.h \
     src/system.h \
     src/get_top_n_impl.h \
     src/get_top_n.h \
@@ -28,7 +27,6 @@ SOURCES += \
     src/objectdetection.cpp \
     src/poseestimation.cpp \
     src/settings.cpp \
-    src/appdata.cpp \
     src/system.cpp \
     src/main.cpp \
     src/utils.cpp \

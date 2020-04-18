@@ -28,7 +28,6 @@ bool TFLiteBase::initialize()
 
     if (m_modelFile.trimmed().isEmpty()) {
         setErrorString("TensorFlow model filename empty");
-        qWarning() << errorString();
         m_initialized = false;
         return false;
     }
@@ -37,7 +36,6 @@ bool TFLiteBase::initialize()
 
     if (m_model == nullptr) {
         setErrorString("TensorFlow model not valid");
-        qWarning() << errorString();
         m_initialized = false;
         return false;
     }
@@ -46,7 +44,6 @@ bool TFLiteBase::initialize()
 
     if (builder(&m_interpreter) != kTfLiteOk) {
         setErrorString("Interpreter builder failed");
-        qWarning() << errorString();
         m_initialized = false;
         return false;
     }
@@ -60,7 +57,6 @@ bool TFLiteBase::initialize()
 
     if (m_interpreter->AllocateTensors() != kTfLiteOk) {
         setErrorString("Allocate tensors failed");
-        qWarning() << errorString();
         m_initialized = false;
         return false;
     }
@@ -103,4 +99,6 @@ void TFLiteBase::setErrorString(const QString &errorString)
 
     m_errorString = errorString;
     emit errorStringChanged(m_errorString);
+    if (!m_errorString.isEmpty())
+        qWarning() << m_errorString;
 }

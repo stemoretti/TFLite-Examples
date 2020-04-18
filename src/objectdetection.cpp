@@ -28,7 +28,6 @@ bool ObjectDetection::customInitStep()
 
     if (m_interpreter->outputs().size() != 4) {
         setErrorString("Graph needs to have exactly 4 outputs");
-        qWarning() << errorString();
         return false;
     }
 
@@ -66,7 +65,6 @@ bool ObjectDetection::preProcessing(const QImage &input)
         default:
             setErrorString("Cannot handle input type " +
                            QString::number(m_interpreter->tensor(input)->type) + " yet");
-            qWarning() << errorString();
             return false;
         }
     }
@@ -80,10 +78,10 @@ void ObjectDetection::postProcessing()
     QList<float> confidences;
     QList<QRectF> boxes;
 
-    int    num_detections    = *Utils::TensorData<float>(m_outputs[3], 0);
-    float *detection_classes =  Utils::TensorData<float>(m_outputs[1], 0);
-    float *detection_scores  =  Utils::TensorData<float>(m_outputs[2], 0);
-    float *detection_boxes   =  Utils::TensorData<float>(m_outputs[0], 0);
+    int    num_detections    = *Utils::TensorData<float>(m_outputs[3]);
+    float *detection_classes =  Utils::TensorData<float>(m_outputs[1]);
+    float *detection_scores  =  Utils::TensorData<float>(m_outputs[2]);
+    float *detection_boxes   =  Utils::TensorData<float>(m_outputs[0]);
 
     for (int i = 0; i < num_detections; ++i) {
         int cls = detection_classes[i] + 1;

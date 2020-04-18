@@ -128,7 +128,7 @@ AppStackPage {
                 var bodypart = pairs[i][0]
                 var bodyjoint = pairs[i][1]
                 if (scores[bodypart] > poseEstimation.score &&
-                        scores[bodyjoint] > poseEstimation.score) {
+                    scores[bodyjoint] > poseEstimation.score) {
                     drawLine(ctx, keypoints[bodypart], keypoints[bodyjoint])
                 }
             }

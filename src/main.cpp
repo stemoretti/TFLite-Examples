@@ -9,7 +9,6 @@
 
 #include <memory>
 
-#include "appdata.h"
 #include "settings.h"
 #include "system.h"
 #include "iconprovider.h"
@@ -55,7 +54,6 @@ int main(int argc, char *argv[])
 
     Settings::instance()->readSettingsFile();
 
-    qmlRegisterSingletonType<AppData>("AppData", 1, 0, "AppData", AppData::singletonProvider);
     qmlRegisterSingletonType<Settings>("Settings", 1, 0, "Settings", Settings::singletonProvider);
     qmlRegisterSingletonType<System>("System", 1, 0, "System", System::singletonProvider);
 
@@ -64,9 +62,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<ObjectDetection>("ObjectDetection", 1, 0, "ObjectDetection");
     qmlRegisterType<ImageClassification>("ImageClassification", 1, 0, "ImageClassification");
     qmlRegisterType<PoseEstimation>("PoseEstimation", 1, 0, "PoseEstimation");
-
-    // FIXME: Instantiate the class to run the constructor
-    AppData::instance();
 
     engine.load(QUrl("qrc:/qml/main.qml"));
 

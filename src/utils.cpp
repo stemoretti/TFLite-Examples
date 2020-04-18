@@ -84,7 +84,8 @@ QImage yuv_420p_to_rgb(const uchar *yuv, int width, int height)
     return image;
 }
 
-QImage yuv_nv21_to_rgb(const uchar *yuv, int width, int height) {
+QImage yuv_nv21_to_rgb(const uchar *yuv, int width, int height)
+{
     QImage image = QImage(width, height, QImage::Format_RGB888);
     uchar *rgb = image.bits();
     int frameSize = width * height;
@@ -156,28 +157,52 @@ QImage argb_data_to_image(const uchar *data, int width, int height,
 }
 
 template<>
-float* TensorData(TfLiteTensor* tensor, int batch_index) {
-    int nelems = 1;
-    for (int i = 1; i < tensor->dims->size; i++) nelems *= tensor->dims->data[i];
-    switch (tensor->type) {
-        case kTfLiteFloat32:
-            return tensor->data.f + nelems * batch_index;
-        default:
-            qDebug() << "Should not reach here!";
+float *TensorData(TfLiteTensor *tensor, std::vector<int> indices)
+{
+    uint dimsIndex = tensor->dims->size - 1;
+    if (indices.size() > dimsIndex)
+        return nullptr;
+
+    int nelems = 0;
+    int skip = 1;
+
+    while (indices.size()) {
+        nelems += skip * indices.back();
+        indices.pop_back();
+        skip *= tensor->dims->data[dimsIndex];
+        dimsIndex--;
     }
+
+    if (tensor->type == kTfLiteFloat32)
+        return tensor->data.f + nelems;
+
+    qDebug() << "Should not reach here!";
+
     return nullptr;
 }
 
 template<>
-uint8_t* TensorData(TfLiteTensor* tensor, int batch_index) {
-    int nelems = 1;
-    for (int i = 1; i < tensor->dims->size; i++) nelems *= tensor->dims->data[i];
-    switch (tensor->type) {
-        case kTfLiteUInt8:
-            return tensor->data.uint8 + nelems * batch_index;
-        default:
-            qDebug() << "Should not reach here!";
+uint8_t *TensorData(TfLiteTensor *tensor, std::vector<int> indices)
+{
+    uint dimsIndex = tensor->dims->size - 1;
+    if (indices.size() > dimsIndex)
+        return nullptr;
+
+    int nelems = 0;
+    int skip = 1;
+
+    while (indices.size()) {
+        nelems += skip * indices.back();
+        indices.pop_back();
+        skip *= tensor->dims->data[dimsIndex];
+        dimsIndex--;
     }
+
+    if (tensor->type == kTfLiteUInt8)
+        return tensor->data.uint8 + nelems;
+
+    qDebug() << "Should not reach here!";
+
     return nullptr;
 }
 

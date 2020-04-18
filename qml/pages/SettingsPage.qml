@@ -144,6 +144,8 @@ AppStackPage {
                     onClicked: thresholdPopup.open()
                 }
 
+                HorizontalListDivider { }
+
                 SettingsItem {
                     title: qsTr("Pose estimation model")
                     subtitle: Settings.poseModel.replace(/.*\//, "")
@@ -153,7 +155,7 @@ AppStackPage {
 
                 SettingsItem {
                     title: qsTr("Minimum score")
-                    subtitle: Math.round(Settings.score * 100) + " %"
+                    subtitle: Settings.score.toFixed(1)
                     onClicked: scorePopup.open()
                 }
             }
@@ -293,16 +295,15 @@ AppStackPage {
     BaseModalPopup {
         id: scorePopup
 
-        onClosed: Settings.score = scoreSpin.value / 100
+        onClosed: Settings.score = scoreSpin.value / 10
 
         SpinBox {
             id: scoreSpin
 
             anchors.centerIn: parent
             from: 1
-            value: Math.round(Settings.score * 100)
-            to: 100
-            stepSize: 1
+            value: Math.round(Settings.score * 10)
+            to: 10
 
             validator: IntValidator {
                 bottom: scoreSpin.from
@@ -310,11 +311,11 @@ AppStackPage {
             }
 
             textFromValue: function(value, locale) {
-                return value + " %"
+                return value / 10
             }
 
             valueFromText: function(text, locale) {
-                return Number.fromLocaleString(locale, text)
+                return Number.fromLocaleString(locale, text) * 10
             }
         }
     }

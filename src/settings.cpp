@@ -24,7 +24,7 @@ Settings::Settings(QObject *parent)
     , m_threads(QThread::idealThreadCount())
     , m_confidence(0.6)
     , m_threshold(0.001)
-    , m_score(0.6)
+    , m_score(0.5)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
 }
