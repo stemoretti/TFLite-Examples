@@ -12,21 +12,22 @@
 # JAVA_HOME            folder of the Java JDK - min version 11
 #
 # Qt_HOST_DIR          folder containing Qt for the Linux host
-# Qt_DIR               folder containing Qt for Android
+# Qt_{arch}_DIR        folder containing Qt for Android
 #
 # VERSION              application version
 
 set -e
 
 arch=${1:-armeabi-v7a}
+arch_path=$(eval "echo \$Qt_${arch/-/_}_DIR")
 build_dir="build-$arch"
 
 cmake -B $build_dir \
     -D CMAKE_BUILD_TYPE=Release \
-    -D CMAKE_TOOLCHAIN_FILE="$Qt_DIR/lib/cmake/Qt6/qt.toolchain.cmake" \
+    -D CMAKE_TOOLCHAIN_FILE="$arch_path/lib/cmake/Qt6/qt.toolchain.cmake" \
     -D QT_ANDROID_ABIS=$arch \
     -D QT_HOST_PATH="$Qt_HOST_DIR" \
-    -D QT_PATH_ANDROID_ABI_$arch="$Qt_DIR"
+    -D QT_PATH_ANDROID_ABI_$arch="$arch_path"
 cmake -B $build_dir
 
 cmake --build $build_dir --parallel 2

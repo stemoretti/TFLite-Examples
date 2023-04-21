@@ -38,7 +38,7 @@ jobs:
         path: ${{ runner.workspace }}/Qt
         key: ${{ runner.os }}-cache-qt-${{ env.QTVER }}
 
-    - name: Install Qt
+    - name: Install dependencies
       env:
         QTDIR: ${{ runner.workspace }}/Qt
       run: |
@@ -51,11 +51,11 @@ jobs:
           libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcb-xinerama0 libxcb1
         if [ "${{ steps.cache-qt.outputs.cache-hit }}" != "true" ]; then
           pip3 install aqtinstall
-          aqt install-qt -O $QTDIR linux desktop $QTVER gcc_64 -m qtmultimedia
-          aqt install-qt -O $QTDIR linux android $QTVER android_armv7 -m qtmultimedia
-          aqt install-qt -O $QTDIR linux android $QTVER android_arm64_v8a -m qtmultimedia
-          aqt install-qt -O $QTDIR linux android $QTVER android_x86 -m qtmultimedia
-          aqt install-qt -O $QTDIR linux android $QTVER android_x86_64 -m qtmultimedia
+          aqt install-qt -O $QTDIR linux desktop $QTVER gcc_64 -m qtmultimedia qtshadertools
+          aqt install-qt -O $QTDIR linux android $QTVER android_armv7 -m qtmultimedia qtshadertools
+          aqt install-qt -O $QTDIR linux android $QTVER android_arm64_v8a -m qtmultimedia qtshadertools
+          aqt install-qt -O $QTDIR linux android $QTVER android_x86 -m qtmultimedia qtshadertools
+          aqt install-qt -O $QTDIR linux android $QTVER android_x86_64 -m qtmultimedia qtshadertools
         fi
         echo "$QTDIR/$QTVER/gcc_64/bin" >> $GITHUB_PATH
         echo "Qt_HOST_DIR=$QTDIR/$QTVER/gcc_64" >> $GITHUB_ENV
