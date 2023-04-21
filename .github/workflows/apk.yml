@@ -1,0 +1,86 @@
+name: Android apk
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/25.1.8937393
+      ANDROID_NDK_HOST: linux-x86_64
+      QTVER: 6.5.0
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Detect release tag
+      run: |
+        TAG=${GITHUB_REF#refs/*/}
+        if [[ "$TAG" == v*.*.* ]]; then
+          VERSION=${TAG#v}
+        else
+          VERSION=$(git log -1 --format=%cd --date=format:%Y%m%d)_$(git rev-parse --short HEAD)
+        fi
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Cache Qt
+      id: cache-qt
+      uses: actions/cache@v3
+      with:
+        path: ${{ runner.workspace }}/Qt
+        key: ${{ runner.os }}-cache-qt-${{ env.QTVER }}
+
+    - name: Install Qt
+      env:
+        QTDIR: ${{ runner.workspace }}/Qt
+      run: |
+        ./external/download.sh
+        sudo apt-get update -qq
+        sudo apt-get install -qy \
+          build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev \
+          libxcb-util1 libxcb-glx0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+          libxcb-randr0 libxcb-render-util0 libxcb-render0 libxcb-shape0 \
+          libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcb-xinerama0 libxcb1
+        if [ "${{ steps.cache-qt.outputs.cache-hit }}" != "true" ]; then
+          pip3 install aqtinstall
+          aqt install-qt -O $QTDIR linux desktop $QTVER gcc_64 -m qtmultimedia
+          aqt install-qt -O $QTDIR linux android $QTVER android_armv7 -m qtmultimedia
+          aqt install-qt -O $QTDIR linux android $QTVER android_arm64_v8a -m qtmultimedia
+          aqt install-qt -O $QTDIR linux android $QTVER android_x86 -m qtmultimedia
+          aqt install-qt -O $QTDIR linux android $QTVER android_x86_64 -m qtmultimedia
+        fi
+        echo "$QTDIR/$QTVER/gcc_64/bin" >> $GITHUB_PATH
+        echo "Qt_HOST_DIR=$QTDIR/$QTVER/gcc_64" >> $GITHUB_ENV
+        echo "Qt_armeabi_v7a_DIR=$QTDIR/$QTVER/android_armv7" >> $GITHUB_ENV
+        echo "Qt_arm64_v8a_DIR=$QTDIR/$QTVER/android_arm64_v8a" >> $GITHUB_ENV
+        echo "Qt_x86_DIR=$QTDIR/$QTVER/android_x86" >> $GITHUB_ENV
+        echo "Qt_x86_64_DIR=$QTDIR/$QTVER/android_x86_64" >> $GITHUB_ENV
+
+    - name: Setup Android SDK
+      run: |
+        $ANDROID_SDK_ROOT/tools/bin/sdkmanager --uninstall \
+          "platforms;android-33-ext5" "platforms;android-33-ext4" \
+          "platforms;android-33" "platforms;android-32"
+        $ANDROID_SDK_ROOT/tools/bin/sdkmanager "ndk;25.1.8937393"
+        echo "$ANDROID_NDK_ROOT/prebuilt/$ANDROID_NDK_HOST/bin" >> $GITHUB_PATH
+
+    - name: Build apks
+      run: |
+        ./scripts/android-build-single.sh armeabi-v7a
+        ./scripts/android-build-single.sh arm64-v8a
+        ./scripts/android-build-single.sh x86
+        ./scripts/android-build-single.sh x86_64
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: Android
+        path: ./*.apk

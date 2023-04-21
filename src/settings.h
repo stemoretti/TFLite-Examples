@@ -5,18 +5,21 @@
 #include <QColor>
 #include <QString>
 
+#include <QtQml/qqmlregistration.h>
+
 class QQmlEngine;
 class QJSEngine;
 
 class Settings : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
     Q_PROPERTY(bool darkTheme READ darkTheme WRITE setDarkTheme NOTIFY darkThemeChanged)
     Q_PROPERTY(QColor primaryColor READ primaryColor WRITE setPrimaryColor NOTIFY primaryColorChanged)
     Q_PROPERTY(QColor accentColor READ accentColor WRITE setAccentColor NOTIFY accentColorChanged)
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
-    Q_PROPERTY(QString country READ country WRITE setCountry NOTIFY countryChanged)
     Q_PROPERTY(QString resolution READ resolution WRITE setResolution NOTIFY resolutionChanged)
     Q_PROPERTY(bool showTime READ showTime WRITE setShowTime NOTIFY showTimeChanged)
     Q_PROPERTY(bool nnapi READ nnapi WRITE setNnapi NOTIFY nnapiChanged)
@@ -33,13 +36,12 @@ class Settings : public QObject
 public:
     ~Settings();
 
-    static Settings *instance();
-    static QObject *singletonProvider(QQmlEngine *qmlEngine, QJSEngine *jsEngine);
+    inline static Settings *instance;
+    static void init() { instance = new Settings(); }
+    static Settings *create(QQmlEngine *, QJSEngine *) { return instance; }
 
     void readSettingsFile();
     void writeSettingsFile() const;
-
-    //{{{ Properties getters/setters declarations
 
     bool darkTheme() const;
     void setDarkTheme(bool darkTheme);
@@ -52,9 +54,6 @@ public:
 
     QString language() const;
     void setLanguage(const QString &language);
-
-    QString country() const;
-    void setCountry(const QString &country);
 
     QString resolution() const;
     void setResolution(const QString &resolution);
@@ -92,16 +91,11 @@ public:
     float score() const;
     void setScore(float score);
 
-    //}}} Properties getters/setters declarations
-
 Q_SIGNALS:
-    //{{{ Properties signals
-
     void darkThemeChanged(bool darkTheme);
     void primaryColorChanged(QColor primaryColor);
     void accentColorChanged(QColor accentColor);
     void languageChanged(QString language);
-    void countryChanged(QString country);
     void resolutionChanged(QString resolution);
     void showTimeChanged(bool showTime);
     void nnapiChanged(bool nnapi);
@@ -115,21 +109,16 @@ Q_SIGNALS:
     void poseModelChanged(QString poseModel);
     void scoreChanged(float threshold);
 
-    //}}} Properties signals
-
 private:
     explicit Settings(QObject *parent = nullptr);
-    Q_DISABLE_COPY(Settings)
+    Q_DISABLE_COPY_MOVE(Settings)
 
     QString m_settingsFilePath;
-
-    //{{{ Properties declarations
 
     bool m_darkTheme;
     QColor m_primaryColor;
     QColor m_accentColor;
     QString m_language;
-    QString m_country;
     QString m_resolution;
     bool m_showTime;
     bool m_nnapi;
@@ -142,8 +131,6 @@ private:
     float m_threshold;
     QString m_poseModel;
     float m_score;
-
-    //}}} Properties declarations
 };
 
 #endif // SETTINGS_H

@@ -1,376 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="it" sourcelanguage="en_US">
+<TS version="2.1" language="it_IT" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
-        <location filename="../qml/pages/AboutPage.qml" line="7"/>
+        <location filename="../qml/AboutPage.qml" line="10"/>
         <source>About</source>
-        <translation>Informazioni App</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/AboutPage.qml" line="38"/>
-        <source>This app is based on the following software:</source>
-        <translation>Questa app si basa sul seguente software:</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/AboutPage.qml" line="105"/>
-        <source>Some code is derived from the following repositories:</source>
-        <translation>Parte del codice deriva dalle seguenti fonti:</translation>
-    </message>
-</context>
-<context>
-    <name>App</name>
-    <message>
-        <location filename="../qml/common/App.qml" line="100"/>
-        <source>App</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ColorSelectionPopup</name>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="59"/>
-        <source>Material Red</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="60"/>
-        <source>Material Pink</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="61"/>
-        <source>Material Purple</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="62"/>
-        <source>Material DeepPurple</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="63"/>
-        <source>Material Indigo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="64"/>
-        <source>Material Blue</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="65"/>
-        <source>Material LightBlue</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="66"/>
-        <source>Material Cyan</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="67"/>
-        <source>Material Teal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="68"/>
-        <source>Material Green</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="69"/>
-        <source>Material LightGreen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="70"/>
-        <source>Material Lime</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="71"/>
-        <source>Material Yellow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="72"/>
-        <source>Material Amber</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="73"/>
-        <source>Material Orange</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="74"/>
-        <source>Material DeepOrange</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="75"/>
-        <source>Material Brown</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="76"/>
-        <source>Material Grey</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/popups/ColorSelectionPopup.qml" line="77"/>
-        <source>Material BlueGrey</source>
-        <translation type="unfinished"></translation>
+        <translation>Informazioni</translation>
     </message>
 </context>
 <context>
     <name>ImageClassificationPage</name>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="15"/>
+        <location filename="../qml/ImageClassificationPage.qml" line="10"/>
         <source>Image Classification</source>
         <translation>Classificazione Immagini</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="124"/>
-        <source>Pause inference</source>
-        <translation>Ferma inferenza</translation>
+        <location filename="../qml/ImageClassificationPage.qml" line="26"/>
+        <source>Error loading model file:</source>
+        <translation>Errore caricamento del modello:</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="124"/>
-        <source>Resume inference</source>
-        <translation>Riprendi inferenza</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="128"/>
-        <source>Select camera</source>
-        <translation>Seleziona camera</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="168"/>
-        <source>Error loading model file:&lt;br&gt;&lt;br&gt;</source>
-        <translation>Errore caricamento del modello:&lt;br&gt;&lt;br&gt;</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ImageClassificationPage.qml" line="169"/>
-        <source>&lt;br&gt;&lt;br&gt;Please download a compatible image classification model from &lt;a href=&apos;https://www.tensorflow.org/lite/models/image_classification/overview&apos;&gt;www.tensorflow.org/lite/models/image_classification/overview&lt;/a&gt;, then load it in the settings page.</source>
-        <translation>&lt;br&gt;&lt;br&gt;Scarica un modello di classificazione immagini compatibile da &lt;a href=&apos;https://www.tensorflow.org/lite/models/image_classification/overview&apos;&gt;www.tensorflow.org/lite/models/image_classification/overview&lt;/a&gt;, poi caricalo nella pagina delle impostazioni.</translation>
+        <location filename="../qml/ImageClassificationPage.qml" line="28"/>
+        <source>Download a compatible image classification model from the address below, then load it in the settings page.</source>
+        <translation>Scarica un modello classificazione immagini compatibile dall&apos;indirizzo qui sotto poi caricalo dalla pagina impostazioni.</translation>
     </message>
 </context>
 <context>
     <name>ObjectDetectionPage</name>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="15"/>
+        <location filename="../qml/ObjectDetectionPage.qml" line="10"/>
         <source>Object Detection</source>
         <translation>Rivelamento Oggetti</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="142"/>
-        <source>Pause inference</source>
-        <translation>Ferma inferenza</translation>
+        <location filename="../qml/ObjectDetectionPage.qml" line="23"/>
+        <source>Error loading model file:</source>
+        <translation>Errore caricamento del modello:</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="142"/>
-        <source>Resume inference</source>
-        <translation>Riprendi inferenza</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="146"/>
-        <source>Select camera</source>
-        <translation>Seleziona camera</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="186"/>
-        <source>Error loading model file:&lt;br&gt;&lt;br&gt;</source>
-        <translation>Errore caricamento del modello:&lt;br&gt;&lt;br&gt;</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/ObjectDetectionPage.qml" line="187"/>
-        <source>&lt;br&gt;&lt;br&gt;Please download a compatible object detection model from &lt;a href=&apos;https://www.tensorflow.org/lite/models/object_detection/overview&apos;&gt;www.tensorflow.org/lite/models/object_detection/overview&lt;/a&gt;, then load it in the settings page.</source>
-        <translation>&lt;br&gt;&lt;br&gt;Scarica un modello di rilevamento oggetti compatibile da &lt;a href=&apos;https://www.tensorflow.org/lite/models/object_detection/overview&apos;&gt;www.tensorflow.org/lite/models/object_detection/overview&lt;/a&gt;, poi caricalo nella pagina delle impostazioni.</translation>
+        <location filename="../qml/ObjectDetectionPage.qml" line="25"/>
+        <source>Download a compatible object detection model from the address below, then load it in the settings page.</source>
+        <translation>Scarica un modello rilevamento oggetti compatibile dall&apos;indirizzo qui sotto poi caricalo dalla pagina impostazioni.</translation>
     </message>
 </context>
 <context>
     <name>PoseEstimationPage</name>
     <message>
-        <location filename="../qml/pages/PoseEstimationPage.qml" line="15"/>
+        <location filename="../qml/PoseEstimationPage.qml" line="8"/>
         <source>Pose Estimation</source>
         <translation>Stima della Posa</translation>
     </message>
     <message>
-        <location filename="../qml/pages/PoseEstimationPage.qml" line="168"/>
-        <source>Pause inference</source>
-        <translation>Ferma inferenza</translation>
+        <location filename="../qml/PoseEstimationPage.qml" line="26"/>
+        <source>Error loading model file:</source>
+        <translation>Errore caricamento del modello:</translation>
     </message>
     <message>
-        <location filename="../qml/pages/PoseEstimationPage.qml" line="168"/>
-        <source>Resume inference</source>
-        <translation>Riprendi inferenza</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/PoseEstimationPage.qml" line="172"/>
-        <source>Select camera</source>
-        <translation>Seleziona camera</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/PoseEstimationPage.qml" line="212"/>
-        <source>Error loading model file:&lt;br&gt;&lt;br&gt;</source>
-        <translation>Errore caricamento del modello:&lt;br&gt;&lt;br&gt;</translation>
-    </message>
-    <message>
-        <location filename="../qml/pages/PoseEstimationPage.qml" line="213"/>
-        <source>&lt;br&gt;&lt;br&gt;Please download a compatible pose estimation model from &lt;a href=&apos;https://www.tensorflow.org/lite/models/pose_estimation/overview&apos;&gt;www.tensorflow.org/lite/models/pose_estimation/overview&lt;/a&gt;, then load it in the settings page.</source>
-        <translation>&lt;br&gt;&lt;br&gt;Scarica un modello di stima della posa compatibile da &lt;a href=&apos;https://www.tensorflow.org/lite/models/pose_estimation/overview&apos;&gt;www.tensorflow.org/lite/models/pose_estimation/overview&lt;/a&gt;, poi caricalo nella pagina delle impostazioni.</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsContinentsPage</name>
-    <message>
-        <location filename="../qml/pages/SettingsContinentsPage.qml" line="8"/>
-        <source>Continents</source>
-        <translation>Continenti</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsCountriesPage</name>
-    <message>
-        <location filename="../qml/pages/SettingsCountriesPage.qml" line="17"/>
-        <source>Countries</source>
-        <translation>Nazioni</translation>
+        <location filename="../qml/PoseEstimationPage.qml" line="28"/>
+        <source>Download a compatible pose estimation model from the address below, then load it in the settings page.</source>
+        <translation>Scarica un modello stima della posa compatibile dall&apos;indirizzo qui sotto poi caricalo dalla pagina impostazioni.</translation>
     </message>
 </context>
 <context>
     <name>SettingsPage</name>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="14"/>
+        <location filename="../qml/SettingsPage.qml" line="14"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="32"/>
-        <source>Dark theme</source>
+        <location filename="../qml/SettingsPage.qml" line="73"/>
+        <source>Cancel</source>
+        <translation>Annulla</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="78"/>
+        <source>Ok</source>
+        <translation>Ok</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="100"/>
+        <source>Theme and colors</source>
+        <translation>Tema e colori</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="103"/>
+        <source>Dark Theme</source>
         <translation>Tema scuro</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="40"/>
+        <location filename="../qml/SettingsPage.qml" line="110"/>
         <source>Primary color</source>
         <translation>Colore primario</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="46"/>
+        <location filename="../qml/SettingsPage.qml" line="119"/>
         <source>Accent color</source>
         <translation>Colore secondario</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="54"/>
+        <location filename="../qml/SettingsPage.qml" line="127"/>
+        <source>Localization</source>
+        <translation>Localizzazione</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="130"/>
+        <location filename="../qml/SettingsPage.qml" line="227"/>
         <source>Language</source>
         <translation>Lingua</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="63"/>
-        <source>Country</source>
-        <translation>Nazione</translation>
+        <location filename="../qml/SettingsPage.qml" line="135"/>
+        <source>Display</source>
+        <translation>Schermo</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="71"/>
-        <source>Resolution</source>
-        <translation>Risoluzione</translation>
+        <location filename="../qml/SettingsPage.qml" line="144"/>
+        <source>Hardware capabilities</source>
+        <translation>Capacità hardware</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="87"/>
+        <location filename="../qml/SettingsPage.qml" line="147"/>
         <source>NNAPI acceleration</source>
         <translation>Accelerazione NNAPI</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="88"/>
+        <location filename="../qml/SettingsPage.qml" line="148"/>
         <source>On Android devices running 8.1 or higher hardware acceleration is available</source>
         <translation>Su dispositivi con Android 8.1 o superiore è disponibile l&apos;accelerazione hardware</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="98"/>
+        <location filename="../qml/SettingsPage.qml" line="157"/>
         <source>Number of threads</source>
         <translation>Numero di threads</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="106"/>
+        <location filename="../qml/SettingsPage.qml" line="162"/>
+        <source>Object detection</source>
+        <translation>Rivelamento Oggetti</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="165"/>
         <source>Objects detection model</source>
         <translation>Modello rilevamento oggetti</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="108"/>
-        <location filename="../qml/pages/SettingsPage.qml" line="115"/>
-        <location filename="../qml/pages/SettingsPage.qml" line="130"/>
-        <location filename="../qml/pages/SettingsPage.qml" line="137"/>
-        <location filename="../qml/pages/SettingsPage.qml" line="152"/>
+        <location filename="../qml/SettingsPage.qml" line="167"/>
+        <location filename="../qml/SettingsPage.qml" line="174"/>
+        <location filename="../qml/SettingsPage.qml" line="189"/>
+        <location filename="../qml/SettingsPage.qml" line="196"/>
+        <location filename="../qml/SettingsPage.qml" line="211"/>
         <source>No file selected</source>
         <translation>Nessun file selezionato</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="113"/>
+        <location filename="../qml/SettingsPage.qml" line="172"/>
         <source>Objects detection labels</source>
         <translation>Etichette rilevamento oggetti</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="120"/>
+        <location filename="../qml/SettingsPage.qml" line="179"/>
         <source>Minimum confidence</source>
         <translation>Confidenza minima</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="128"/>
+        <location filename="../qml/SettingsPage.qml" line="184"/>
+        <source>Image classification</source>
+        <translation>Classificazione Immagini</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="187"/>
         <source>Image classification model</source>
         <translation>Modello classificazione immagini</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="135"/>
+        <location filename="../qml/SettingsPage.qml" line="194"/>
         <source>Image classification labels</source>
         <translation>Etichette classificazione immagini</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="142"/>
+        <location filename="../qml/SettingsPage.qml" line="201"/>
         <source>Classification threshold</source>
         <translation>Soglia per classificazione</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="150"/>
+        <location filename="../qml/SettingsPage.qml" line="206"/>
+        <source>Pose estimation</source>
+        <translation>Stima della Posa</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="209"/>
         <source>Pose estimation model</source>
         <translation>Modello stima della posa</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="157"/>
+        <location filename="../qml/SettingsPage.qml" line="216"/>
         <source>Minimum score</source>
         <translation>Soglia minima per posa</translation>
     </message>
     <message>
-        <location filename="../qml/pages/SettingsPage.qml" line="79"/>
+        <location filename="../qml/SettingsPage.qml" line="248"/>
+        <source>Choose accent color</source>
+        <translation>Seleziona colore secondario</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="248"/>
+        <source>Choose primary color</source>
+        <translation>Seleziona colore primario</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="138"/>
         <source>Show inference time</source>
         <translation>Visualizza durata inferenza</translation>
     </message>
 </context>
 <context>
-    <name>main</name>
+    <name>VideoFilterBasePage</name>
     <message>
-        <location filename="../qml/main.qml" line="83"/>
-        <source>Object Detection</source>
-        <translation>Rilevamento Oggetti</translation>
+        <location filename="../qml/VideoFilterBasePage.qml" line="125"/>
+        <source>Pause inference</source>
+        <translation>Ferma inferenza</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="88"/>
+        <location filename="../qml/VideoFilterBasePage.qml" line="125"/>
+        <source>Resume inference</source>
+        <translation>Riprendi inferenza</translation>
+    </message>
+    <message>
+        <location filename="../qml/VideoFilterBasePage.qml" line="129"/>
+        <source>Select camera</source>
+        <translation>Seleziona fotocamera</translation>
+    </message>
+    <message>
+        <location filename="../qml/VideoFilterBasePage.qml" line="133"/>
+        <source>Select camera resolution</source>
+        <translation>Seleziona risoluzione fotocamera</translation>
+    </message>
+    <message>
+        <location filename="../qml/VideoFilterBasePage.qml" line="141"/>
+        <source>Available cameras</source>
+        <translation>Fotocamere disponibili</translation>
+    </message>
+    <message>
+        <location filename="../qml/VideoFilterBasePage.qml" line="158"/>
+        <source>Available resolutions</source>
+        <translation>Risoluzioni disponibili</translation>
+    </message>
+    <message>
+        <location filename="../qml/VideoFilterBasePage.qml" line="239"/>
+        <source>Object Detection</source>
+        <translation>Rivelamento Oggetti</translation>
+    </message>
+    <message>
+        <location filename="../qml/VideoFilterBasePage.qml" line="244"/>
         <source>Image Classification</source>
         <translation>Classificazione Immagini</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="93"/>
+        <location filename="../qml/VideoFilterBasePage.qml" line="249"/>
         <source>Pose Estimation</source>
         <translation>Stima della Posa</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="118"/>
+        <location filename="../qml/VideoFilterBasePage.qml" line="280"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="123"/>
+        <location filename="../qml/VideoFilterBasePage.qml" line="285"/>
         <source>About</source>
         <translation>Informazioni App</translation>
     </message>

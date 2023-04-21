@@ -17,7 +17,6 @@ Settings::Settings(QObject *parent)
     , m_primaryColor("#607D8B") // Material.BlueGrey
     , m_accentColor("#FF9800") // Material.Orange
     , m_language("en")
-    , m_country("en_US")
     , m_resolution("640x480")
     , m_showTime(true)
     , m_nnapi(false)
@@ -27,26 +26,14 @@ Settings::Settings(QObject *parent)
     , m_score(0.5)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+    if (!System::instance->checkDirs())
+        qWarning() << "Cannot create data directory. Settings won't be saved.";
+    readSettingsFile();
 }
 
 Settings::~Settings()
 {
     writeSettingsFile();
-}
-
-Settings *Settings::instance()
-{
-    static Settings instance;
-
-    return &instance;
-}
-
-QObject *Settings::singletonProvider(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
-{
-    Q_UNUSED(qmlEngine)
-    Q_UNUSED(jsEngine)
-
-    return instance();
 }
 
 void Settings::readSettingsFile()
@@ -58,7 +45,6 @@ void Settings::readSettingsFile()
     if (!readFile.exists()) {
         qWarning() << "Cannot find the settings file:" << m_settingsFilePath;
         qDebug() << "Using default settings values";
-        setCountry(System::locale());
         if (System::translations().contains(System::language()))
             setLanguage(System::language());
         return;
@@ -78,7 +64,6 @@ void Settings::readSettingsFile()
     setPrimaryColor(jobj["primaryColor"].toString());
     setAccentColor(jobj["accentColor"].toString());
     setLanguage(jobj["language"].toString());
-    setCountry(jobj["country"].toString());
     setResolution(jobj["resolution"].toString());
     setShowTime(jobj["showTime"].toBool());
     setNnapi(jobj["nnapi"].toBool());
@@ -110,7 +95,6 @@ void Settings::writeSettingsFile() const
     jobj["primaryColor"] = m_primaryColor.name(QColor::HexRgb);
     jobj["accentColor"] = m_accentColor.name(QColor::HexRgb);
     jobj["language"] = m_language;
-    jobj["country"] = m_country;
     jobj["resolution"] = m_resolution;
     jobj["showTime"] = m_showTime;
     jobj["nnapi"] = m_nnapi;
@@ -128,8 +112,6 @@ void Settings::writeSettingsFile() const
 
     qDebug() << "Settings file saved";
 }
-
-//{{{ Properties getters/setters definitions
 
 bool Settings::darkTheme() const
 {
@@ -185,20 +167,6 @@ void Settings::setLanguage(const QString &language)
 
     m_language = language;
     emit languageChanged(m_language);
-}
-
-QString Settings::country() const
-{
-    return m_country;
-}
-
-void Settings::setCountry(const QString &country)
-{
-    if (m_country == country)
-        return;
-
-    m_country = country;
-    emit countryChanged(m_country);
 }
 
 QString Settings::resolution() const
@@ -368,5 +336,3 @@ void Settings::setScore(float score)
     m_score = score;
     emit scoreChanged(m_score);
 }
-
-//}}} Properties getters/setters definitions

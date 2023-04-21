@@ -1,14 +1,17 @@
 #ifndef IMAGECLASSIFICATION_H
 #define IMAGECLASSIFICATION_H
 
-#include "tflite.h"
-
 #include <QImage>
 #include <QVariantList>
+
+#include <QtQml/qqmlregistration.h>
+
+#include "tflite.h"
 
 class ImageClassification : public TFLite<QImage>
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY(QString labelsFile MEMBER m_labelsFile NOTIFY labelsFileChanged)
     Q_PROPERTY(float threshold MEMBER m_threshold NOTIFY thresholdChanged)

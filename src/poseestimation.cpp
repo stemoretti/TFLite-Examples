@@ -1,7 +1,5 @@
 #include "poseestimation.h"
 
-#include <QDebug>
-
 #include <cmath>
 
 #include "utils.h"
@@ -86,38 +84,35 @@ void PoseEstimation::postProcessing()
     int width = m_outputs[0]->dims->data[2];
     int num_key = m_outputs[0]->dims->data[3];
 
-    for (int keypoint = 0; keypoint < num_key; keypoint++) {
+    for (int i = 0; i < num_key; i++) {
         float max_val = 0.0f;
         int maxrow = 0;
         int maxcol = 0;
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                float *point = Utils::TensorData<float>(heatmaps, { row, col, keypoint });
-                if (point && *point > max_val) {
+                float *point = Utils::TensorData<float>(heatmaps, { row, col, i });
+                if (point && (*point > max_val)) {
                     max_val = *point;
                     maxrow = row;
                     maxcol = col;
                 }
             }
         }
-        keypoints.append(QPoint(maxcol, maxrow));
-        scores.append(1.0f / (1.0f + std::exp(-max_val)));
-    }
 
-    for (int i = 0; i < num_key; i++) {
-        QPoint point = keypoints[i].toPoint();
-        int x = point.x();
-        int y = point.y();
-        float *offsetX = Utils::TensorData<float>(offsets, { y, x, num_key + i });
-        float *offsetY = Utils::TensorData<float>(offsets, { y, x, i });
+        float *offsetX = Utils::TensorData<float>(offsets, { maxrow, maxcol, num_key + i });
+        float *offsetY = Utils::TensorData<float>(offsets, { maxrow, maxcol, i });
         if (!offsetX || !offsetY) {
             setErrorString("Undefined pointer to offset");
             return;
         }
-        point.setX((x / float(width - 1) + *offsetX / wanted_width) * m_contentSize.width());
-        point.setY((y / float(height - 1) + *offsetY / wanted_height) * m_contentSize.height());
-        keypoints[i] = point;
+
+        QPoint point;
+        point.setX((maxcol / float(width - 1) + *offsetX / wanted_width) * m_contentSize.width());
+        point.setY((maxrow / float(height - 1) + *offsetY / wanted_height) * m_contentSize.height());
+
+        keypoints.append(point);
+        scores.append(1.0f / (1.0f + std::exp(-max_val)));
     }
 
-    emit results(keypoints, scores);
+    Q_EMIT results(keypoints, scores);
 }

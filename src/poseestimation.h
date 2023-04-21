@@ -1,13 +1,17 @@
 #ifndef POSEESTIMATION_H
 #define POSEESTIMATION_H
 
-#include "tflite.h"
-
 #include <QImage>
+#include <QVariantList>
+
+#include <QtQml/qqmlregistration.h>
+
+#include "tflite.h"
 
 class PoseEstimation : public TFLite<QImage>
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY(QSize contentSize MEMBER m_contentSize NOTIFY contentSizeChanged)
     Q_PROPERTY(float score MEMBER m_score NOTIFY scoreChanged)
@@ -15,24 +19,16 @@ class PoseEstimation : public TFLite<QImage>
 public:
     enum BodyPart {
         Nose,
-        LeftEye,
-        RightEye,
-        LeftEar,
-        RightEar,
-        LeftShoulder,
-        RightShoulder,
-        LeftElbow,
-        RightElbow,
-        LeftWrist,
-        RightWrist,
-        LeftHip,
-        RightHip,
-        LeftKnee,
-        RightKnee,
-        LeftAnkle,
-        RightAnkle
+        LeftEye, RightEye,
+        LeftEar, RightEar,
+        LeftShoulder, RightShoulder,
+        LeftElbow, RightElbow,
+        LeftWrist, RightWrist,
+        LeftHip, RightHip,
+        LeftKnee, RightKnee,
+        LeftAnkle, RightAnkle
     };
-    Q_ENUMS(BodyPart);
+    Q_ENUM(BodyPart)
 
     explicit PoseEstimation(QObject *parent = nullptr);
 

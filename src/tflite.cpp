@@ -1,6 +1,17 @@
 #include "tflite.h"
 
+#include <QByteArray>
+#include <QDebug>
+#include <QFile>
 #include <QThread>
+
+#ifndef Q_OS_ANDROID
+#include <QUrl>
+#endif
+
+#ifdef Q_OS_ANDROID
+#include "tensorflow/lite/delegates/nnapi/nnapi_delegate.h"
+#endif
 
 using namespace tflite;
 
@@ -32,7 +43,24 @@ bool TFLiteBase::initialize()
         return false;
     }
 
-    m_model = FlatBufferModel::BuildFromFile(m_modelFile.toUtf8(), &m_error);
+    QFile file;
+#ifdef Q_OS_ANDROID
+    file.setFileName(m_modelFile);
+#else
+    file.setFileName(QUrl(m_modelFile).toLocalFile());
+#endif
+    if (!file.exists()) {
+        qWarning() << "Model file doesn't exist:" << m_modelFile;
+        m_initialized = false;
+        return false;
+    }
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning() << "Cannot open file:" << m_modelFile;
+        m_initialized = false;
+        return false;
+    }
+    m_modelBuffer = file.readAll();
+    m_model = FlatBufferModel::BuildFromBuffer(m_modelBuffer, m_modelBuffer.size(), &m_error);
 
     if (m_model == nullptr) {
         setErrorString("TensorFlow model not valid");
@@ -48,8 +76,10 @@ bool TFLiteBase::initialize()
         return false;
     }
 
-    m_interpreter->UseNNAPI(m_acceleration);
+#ifdef Q_OS_ANDROID
+    m_interpreter->ModifyGraphWithDelegate(std::make_unique<StatefulNnApiDelegate>());
     qDebug() << "NNAPI:" << m_acceleration;
+#endif
 
     if (m_threads > 1)
         m_interpreter->SetNumThreads(m_threads);

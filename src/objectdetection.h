@@ -1,15 +1,17 @@
 #ifndef OBJECTDETECTION_H
 #define OBJECTDETECTION_H
 
-#include "tflite.h"
-
 #include <QImage>
 
+#include <QtQml/qqmlregistration.h>
+
 #include "boxesmodel.h"
+#include "tflite.h"
 
 class ObjectDetection : public TFLite<QImage>
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY(QString labelsFile MEMBER m_labelsFile NOTIFY labelsFileChanged)
     Q_PROPERTY(BoxesModel *boxes READ boxes CONSTANT)

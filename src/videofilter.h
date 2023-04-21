@@ -1,12 +1,16 @@
 #ifndef VIDEOFILTER_H
 #define VIDEOFILTER_H
 
-#include <QAbstractVideoFilter>
-#include <QVideoFilterRunnable>
 #include <QFuture>
+#include <QFutureWatcher>
+#include <QVideoFrame>
+#include <QVideoSink>
 
-class TFLiteBase;
-template <typename T> class TFLite;
+#include <QtQml/qqmlregistration.h>
+
+#include <memory>
+
+#include "tflite.h"
 
 struct SimpleVideoFrame
 {
@@ -14,68 +18,75 @@ struct SimpleVideoFrame
     Q_DISABLE_COPY(SimpleVideoFrame)
 
     void copyData(QVideoFrame *frame) {
-        frame->map(QAbstractVideoBuffer::ReadOnly);
+        int sz = 0;
+        for (int i = 0; i < frame->planeCount(); i++)
+            sz += frame->mappedBytes(i);
 
-        if (frame->mappedBytes() != dataSize) {
-            dataSize = frame->mappedBytes();
-            data = std::make_unique<uchar[]>(dataSize);
+        if (sz != dataSize) {
+            dataSize = sz;
+            data = std::make_unique<unsigned char[]>(dataSize);
         }
-        memcpy(data.get(), frame->bits(), dataSize);
+
+        for (int i = 0, shift = 0; i < frame->planeCount(); i++) {
+            int bytes = frame->mappedBytes(i);
+            memcpy(data.get() + shift, frame->bits(i), bytes);
+            shift += bytes;
+        }
         size = frame->size();
         pixelFormat = frame->pixelFormat();
-
-        frame->unmap();
     }
 
-    std::unique_ptr<uchar[]> data;
+    std::unique_ptr<unsigned char[]> data;
     int dataSize;
     QSize size;
-    QVideoFrame::PixelFormat pixelFormat;
+    QVideoFrameFormat::PixelFormat pixelFormat;
 };
 
-class VideoFilter : public QAbstractVideoFilter
+class VideoFilter : public QObject
 {
-    friend class VideoFilterRunnable;
-
     Q_OBJECT
+    QML_ELEMENT
 
+    Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(int orientation MEMBER m_orientation NOTIFY orientationChanged)
     Q_PROPERTY(QRect captureRect MEMBER m_captureRect NOTIFY captureRectChanged)
-    Q_PROPERTY(TFLiteBase *tflite READ tflite WRITE setTflite NOTIFY tfliteChanged)
+    Q_PROPERTY(QObject *tflite READ tflite WRITE setTflite)
+    Q_PROPERTY(QObject *videoSink READ videoSink WRITE setVideoSink)
 
 public:
     explicit VideoFilter(QObject *parent = nullptr);
     ~VideoFilter();
 
-    QVideoFilterRunnable *createFilterRunnable() override;
+    bool active();
+    void setActive(bool active);
 
-    TFLiteBase *tflite();
-    void setTflite(TFLiteBase *tflite);
+    QObject *tflite();
+    void setTflite(QObject *tflite);
+
+    QObject *videoSink();
+    void setVideoSink(QObject *videoSink);
 
 Q_SIGNALS:
+    void activeChanged(bool active);
     void orientationChanged(int orientation);
     void captureRectChanged(QRect captureRect);
-    void tfliteChanged(const TFLiteBase *tflite);
 
 private:
-    QFuture<void> m_processThread;
+    void newVideoFrame(const QVideoFrame &frame);
+    bool processVideoFrame(int orientation, bool mirrored, QRect captureRect) const;
+    void processingFinished();
 
+    QFuture<bool> m_future;
+    QFutureWatcher<bool> m_watcher;
+    bool m_running;
+
+    SimpleVideoFrame m_frame;
+
+    bool m_active;
     int m_orientation;
     QRect m_captureRect;
     TFLite<QImage> *m_tflite;
-};
-
-class VideoFilterRunnable : public QVideoFilterRunnable
-{
-public:
-    explicit VideoFilterRunnable(VideoFilter *filter);
-
-    QVideoFrame run(QVideoFrame *input, const QVideoSurfaceFormat &surfaceFormat, RunFlags flags) override;
-    void processVideoFrame(int orientation, QRect captureRect);
-
-private:
-    VideoFilter *m_filter;
-    SimpleVideoFrame m_frame;
+    QVideoSink *m_videoSink;
 };
 
 #endif // VIDEOFILTER_H

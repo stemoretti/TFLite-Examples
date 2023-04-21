@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QElapsedTimer>
-#include <QDebug>
-#include <QFile>
+
+#include <atomic>
 
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/model.h"
@@ -35,11 +35,11 @@ public:
     void setErrorString(const QString &errorString);
 
 Q_SIGNALS:
-    void modelFileChanged(QString modelFile);
+    void modelFileChanged(const QString &modelFile);
     void threadsChanged(int threads);
     void accelerationChanged(bool acceleration);
     void inferenceTimeChanged(int time);
-    void errorStringChanged(QString errorString);
+    void errorStringChanged(const QString &errorString);
 
 protected:
     bool initialize();
@@ -53,6 +53,8 @@ private:
     Q_DISABLE_COPY(TFLiteBase)
 
     std::atomic<bool> m_initialized;
+
+    QByteArray m_modelBuffer;
 
     QString m_modelFile;
     int m_threads;

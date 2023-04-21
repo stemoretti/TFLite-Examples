@@ -4,7 +4,6 @@
 #include <QImage>
 #include <QStringList>
 #include <QString>
-#include <QDebug>
 
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/kernels/register.h"
@@ -13,14 +12,7 @@
 namespace Utils
 {
 
-QImage rotateImage(QImage img, double rotation);
 QStringList readLabels(const QString &filename);
-
-QImage yuv_420p_to_rgb(const uchar *yuv, int width, int height);
-QImage yuv_nv21_to_rgb(const uchar *yuv, int width, int height);
-QImage argb_data_to_image(const uchar *data, int width, int height,
-                          int alpha, int red, int green, int blue,
-                          bool isPremultiplied = false);
 
 // https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/examples/label_image/bitmap_helpers_impl.h
 template <class T>
