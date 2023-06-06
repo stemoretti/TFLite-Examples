@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QElapsedTimer>
 
-#include <atomic>
-
 #include "tensorflow/lite/interpreter.h"
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/kernels/register.h"
@@ -52,7 +50,7 @@ protected:
 private:
     Q_DISABLE_COPY(TFLiteBase)
 
-    std::atomic<bool> m_initialized;
+    bool m_initialized;
 
     QByteArray m_modelBuffer;
 

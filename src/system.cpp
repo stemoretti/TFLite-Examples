@@ -63,7 +63,8 @@ QStringList System::translations()
 
     if (translationsDir.exists()) {
         QStringList translations = translationsDir.entryList({ "*.qm" });
-        translations.replaceInStrings(QRegularExpression("[^_]+_(\\w+)\\.qm"), "\\1");
+        translations.replaceInStrings("tflite-examples_", "");
+        translations.replaceInStrings(".qm", "");
         languages.append(translations);
         languages.sort();
     }

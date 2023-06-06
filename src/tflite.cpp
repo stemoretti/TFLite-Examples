@@ -34,12 +34,11 @@ void TFLiteBase::queueInit()
 
 bool TFLiteBase::initialize()
 {
-    if (m_initialized.exchange(true))
+    if (m_initialized)
         return true;
 
     if (m_modelFile.trimmed().isEmpty()) {
         setErrorString("TensorFlow model filename empty");
-        m_initialized = false;
         return false;
     }
 
@@ -51,12 +50,10 @@ bool TFLiteBase::initialize()
 #endif
     if (!file.exists()) {
         qWarning() << "Model file doesn't exist:" << m_modelFile;
-        m_initialized = false;
         return false;
     }
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Cannot open file:" << m_modelFile;
-        m_initialized = false;
         return false;
     }
     m_modelBuffer = file.readAll();
@@ -64,7 +61,6 @@ bool TFLiteBase::initialize()
 
     if (m_model == nullptr) {
         setErrorString("TensorFlow model not valid");
-        m_initialized = false;
         return false;
     }
 
@@ -72,7 +68,6 @@ bool TFLiteBase::initialize()
 
     if (builder(&m_interpreter) != kTfLiteOk) {
         setErrorString("Interpreter builder failed");
-        m_initialized = false;
         return false;
     }
 
@@ -87,16 +82,15 @@ bool TFLiteBase::initialize()
 
     if (m_interpreter->AllocateTensors() != kTfLiteOk) {
         setErrorString("Allocate tensors failed");
-        m_initialized = false;
         return false;
     }
 
-    if (!customInitStep()) {
-        m_initialized = false;
+    if (!customInitStep())
         return false;
-    }
 
     setErrorString(QString());
+
+    m_initialized = true;
 
     qDebug() << "Tensorflow initialization: OK";
 
@@ -114,7 +108,7 @@ void TFLiteBase::setInferenceTime(int time)
         return;
 
     m_inferenceTime = time;
-    emit inferenceTimeChanged(m_inferenceTime);
+    Q_EMIT inferenceTimeChanged(time);
 }
 
 QString TFLiteBase::errorString() const
@@ -128,7 +122,7 @@ void TFLiteBase::setErrorString(const QString &errorString)
         return;
 
     m_errorString = errorString;
-    emit errorStringChanged(m_errorString);
+    Q_EMIT errorStringChanged(errorString);
     if (!m_errorString.isEmpty())
         qWarning() << m_errorString;
 }

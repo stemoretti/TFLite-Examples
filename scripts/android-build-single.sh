@@ -8,7 +8,7 @@
 # The following environment variables must be set:
 #
 # ANDROID_SDK_ROOT     folder of the Android SDK
-# ANDROID_NDK_ROOT     folder of the Android NDK - min version 23.1
+# ANDROID_NDK_ROOT     folder of the Android NDK - min version 25.1
 # JAVA_HOME            folder of the Java JDK - min version 11
 #
 # Qt_HOST_DIR          folder containing Qt for the Linux host

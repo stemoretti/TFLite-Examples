@@ -1,64 +1,80 @@
 import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import BaseUI as UI
 
-import TFLite
+import TFLite as TFL
 
-VideoFilterBasePage {
+MainPage {
     id: root
 
     title: qsTr("Object Detection")
 
-    tflite: ObjectDetection {
-        id: objectDetection
+    ColumnLayout {
+        anchors { left: parent.left; right: parent.right }
 
-        modelFile: Settings.objectsModel
-        labelsFile: Settings.objectsLabels
-        acceleration: Settings.nnapi
-        threads: Settings.threads
-        contentSize: Qt.size(videoOutput.width, videoOutput.height)
-        confidence: Settings.confidence
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
+
+            ToolButton {
+                icon.source: UI.Icons.camera
+                text: "Camera"
+                onClicked: stack.push(Qt.resolvedUrl("ObjectDetectionCameraPage.qml"))
+            }
+            ToolButton {
+                icon.source: UI.Icons.video_library
+                text: "Video"
+                onClicked: stack.push(Qt.resolvedUrl("ObjectDetectionVideoPage.qml"))
+            }
+        }
+
+        UI.SettingsItem {
+            title: qsTr("Objects detection model")
+            subtitle: _formatFilename(TFL.Settings.objectsModel)
+            subtitlePlaceholder: qsTr("No file selected")
+            onClicked: selectModelFile(title, "objectsModel")
+        }
+
+        UI.SettingsItem {
+            title: qsTr("Objects detection labels")
+            subtitle: _formatFilename(TFL.Settings.objectsLabels)
+            subtitlePlaceholder: qsTr("No file selected")
+            onClicked: selectModelFile(title, "objectsLabels")
+        }
+
+        UI.SettingsItem {
+            title: qsTr("Minimum confidence")
+            subtitle: Math.round(TFL.Settings.confidence * 100) + " %"
+            onClicked: confidencePopup.open()
+        }
     }
 
-    errorString: qsTr("Error loading model file:")
-        + "<br><br>%1<br><br>".arg(objectDetection.errorString)
-        + qsTr("Download a compatible object detection model from the address below, then load it in the settings page.")
-        + "<br><br><a href='%1'>%1</a>"
-          .arg("https://www.tensorflow.org/lite/models/trained")
+    CustomDialog {
+        id: confidencePopup
 
-    Repeater {
-        model: objectDetection.boxes
+        onAccepted: TFL.Settings.confidence = confidenceSpin.value / 100
 
-        Rectangle {
-            visible: root.active
-            x: model.rect.x
-            y: model.rect.y
-            width: model.rect.width
-            height: model.rect.height
-            color: "transparent"
-            border.color: model.color
-            border.width: 2
+        SpinBox {
+            id: confidenceSpin
 
-            UI.LabelTitle {
-                color: "white"
-                text: model.name + " " + Math.round(model.confidence * 100) + "%"
+            anchors.centerIn: parent
+            from: 1
+            value: Math.round(TFL.Settings.confidence * 100)
+            to: 100
+            stepSize: 1
 
-                background: Rectangle {
-                    anchors.fill: parent
-                    color: model.color
-                }
+            validator: IntValidator {
+                bottom: confidenceSpin.from
+                top: confidenceSpin.to
+            }
 
-                Component.onCompleted: {
-                    if (parent.y + parent.height + implicitHeight > root.height)
-                        anchors.bottom = parent.bottom
-                    else
-                        anchors.top = parent.bottom
+            textFromValue: function(value, locale) {
+                return value + " %"
+            }
 
-                    if (parent.x + implicitWidth > root.width)
-                        anchors.right = parent.right
-                    else
-                        anchors.left = parent.left
-                }
+            valueFromText: function(text, locale) {
+                return Number.fromLocaleString(locale, text)
             }
         }
     }

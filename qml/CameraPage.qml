@@ -16,8 +16,8 @@ UI.AppStackPage {
     property alias videoOutput: vout
 
     leftButton: Action {
-        icon.source: UI.Icons.menu
-        onTriggered: navDrawer.open()
+        icon.source: UI.Icons.arrow_back
+        onTriggered: root.back()
     }
 
     rightButtons: [
@@ -33,6 +33,9 @@ UI.AppStackPage {
             if (Application.state == Qt.ApplicationSuspended) {
                 videoFilter.active = false
                 camera.stop()
+                videoFilter.clearSink()
+            } else if (Application.state == Qt.ApplicatoinInactive) {
+                videoFilter.active = false
             }
         }
     }
@@ -71,7 +74,7 @@ UI.AppStackPage {
         id: videoFilter
 
         orientation: vout.orientation
-        captureRect: vout.contentRect
+        captureRect: vout.sourceRect
         videoSink: vout.videoSink
     }
 
@@ -106,7 +109,12 @@ UI.AppStackPage {
 
         MenuItem {
             text: videoFilter.active ? qsTr("Pause inference") : qsTr("Resume inference")
-            onTriggered: videoFilter.active = !videoFilter.active
+            onTriggered: {
+                if (!videoFilter.active) {
+                    camera.start()
+                }
+                videoFilter.active = !videoFilter.active
+            }
         }
         MenuItem {
             text: qsTr("Select camera")
@@ -138,11 +146,49 @@ UI.AppStackPage {
     UI.OptionsDialog {
         id: resolutionsPopup
 
+        property var pixelFormats: [
+            "Invalid",
+            "ARGB8888",
+            "ARGB8888_Premultiplied",
+            "XRGB8888",
+            "BGRA8888",
+            "BGRA8888_Premultiplied",
+            "BGRX8888",
+            "ABGR8888",
+            "XBGR8888",
+            "RGBA8888",
+            "RGBX8888",
+            "AYUV",
+            "AYUV_Premultiplied",
+            "YUV420P",
+            "YUV422P",
+            "YV12",
+            "UYVY",
+            "YUYV",
+            "NV12",
+            "NV21",
+            "IMC1",
+            "IMC2",
+            "IMC3",
+            "IMC4",
+            "Y8",
+            "Y16",
+            "P010",
+            "P016",
+            "SamplerExternalOES",
+            "Jpeg",
+            "SamplerRect",
+            "YUV420P10",
+        ]
+
         title: qsTr("Available resolutions")
         model: camera.cameraDevice.videoFormats
         delegate: RadioButton {
             checked: modelData === camera.cameraFormat
-            text: "%1x%2".arg(modelData.resolution.width).arg(modelData.resolution.height)
+            text: "%1x%2 (%3)"
+                    .arg(modelData.resolution.width)
+                    .arg(modelData.resolution.height)
+                    .arg(resolutionsPopup.pixelFormats[modelData.pixelFormat])
             onClicked: {
                 camera.stop()
                 camera.cameraFormat = modelData
@@ -179,111 +225,6 @@ UI.AppStackPage {
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
             onLinkActivated: Qt.openUrlExternally(link)
-        }
-    }
-
-    Drawer {
-        id: navDrawer
-
-        interactive: stack?.depth === 1
-        width: Math.min(240, Math.min(parent.width, parent.height) / 3 * 2 )
-        height: parent.height
-
-        onAboutToShow: menuColumn.enabled = true
-
-        Flickable {
-            anchors.fill: parent
-            contentHeight: menuColumn.implicitHeight
-            boundsBehavior: Flickable.StopAtBounds
-
-            ColumnLayout {
-                id: menuColumn
-
-                anchors { left: parent.left; right: parent.right }
-                spacing: 0
-
-                Label {
-                    text: Qt.application.displayName
-                    color: Material.foreground
-                    font.pixelSize: UI.Style.fontSizeHeadline
-                    padding: (root.appToolBar.implicitHeight - contentHeight) / 2
-                    leftPadding: 20
-                    Layout.fillWidth: true
-                }
-
-                UI.HorizontalListDivider {}
-
-                Repeater {
-                    id: actionsList
-
-                    model: [
-                        {
-                            icon: UI.Icons.account_box,
-                            text: QT_TR_NOOP("Object Detection"),
-                            page: "ObjectDetectionPage.qml"
-                        },
-                        {
-                            icon: UI.Icons.local_florist,
-                            text: QT_TR_NOOP("Image Classification"),
-                            page: "ImageClassificationPage.qml"
-                        },
-                        {
-                            icon: UI.Icons.directions_walk,
-                            text: QT_TR_NOOP("Pose Estimation"),
-                            page: "PoseEstimationPage.qml"
-                        }
-                    ]
-
-                    delegate: ItemDelegate {
-                        icon.source: modelData.icon
-                        text: qsTr(modelData.text)
-
-                        Layout.fillWidth: true
-
-                        onClicked: {
-                            videoFilter.active = false
-                            camera.stop()
-                            // Disable, or a double click will push the page twice.
-                            menuColumn.enabled = false
-                            navDrawer.close()
-                            stack.replace(Qt.resolvedUrl(modelData.page))
-                        }
-                    }
-                }
-
-                UI.HorizontalListDivider { }
-
-                Repeater {
-                    id: pageList
-
-                    model: [
-                        {
-                            icon: UI.Icons.settings,
-                            text: QT_TR_NOOP("Settings"),
-                            page: "SettingsPage.qml"
-                        },
-                        {
-                            icon: UI.Icons.info_outline,
-                            text: QT_TR_NOOP("About"),
-                            page: "AboutPage.qml"
-                        }
-                    ]
-
-                    delegate: ItemDelegate {
-                        icon.source: modelData.icon
-                        text: qsTr(modelData.text)
-
-                        Layout.fillWidth: true
-
-                        onClicked: {
-                            // Disable, or a double click will push the page twice.
-                            menuColumn.enabled = false
-                            navDrawer.close()
-                            stack.push(Qt.resolvedUrl(modelData.page))
-                        }
-                    }
-                }
-            }
         }
     }
 }

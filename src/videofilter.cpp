@@ -5,19 +5,18 @@
 
 #include "tflite.h"
 
-static QImage yuv_420p_to_rgb(const uchar *yuv, int width, int height)
+static QImage yuv_420p_to_rgb(const uchar *yuv, int ystride, int ustride, int vstride, int width, int height)
 {
     QImage image = QImage(width, height, QImage::Format_RGB888);
     uchar *rgb = image.bits();
-    int wh = width * height;
-    int w_2 = width / 2;
+    int wh = ystride * height;
     int wh_54 = wh * 5 / 4;
 
     for (int y = 0; y < height; y++) {
-        int Y_offset = y * width;
+        int Y_offset = y * ystride;
         int y_2 = y / 2;
-        int U_offset = y_2 * w_2 + wh;
-        int V_offset = y_2 * w_2 + wh_54;
+        int U_offset = y_2 * ustride + wh;
+        int V_offset = y_2 * vstride + wh_54;
         for (int x = 0; x < width; x++) {
             int x_2 = x / 2;
             uchar Y = yuv[Y_offset + x];
@@ -152,8 +151,11 @@ void VideoFilter::setVideoSink(QObject *videoSink)
     if (m_videoSink == videoSink)
         return;
 
-    m_videoSink = qobject_cast<QVideoSink *>(videoSink);
-    connect(m_videoSink, &QVideoSink::videoFrameChanged, this, &VideoFilter::newVideoFrame);
+    clearSink();
+    if (videoSink) {
+        m_videoSink = qobject_cast<QVideoSink *>(videoSink);
+        connect(m_videoSink, &QVideoSink::videoFrameChanged, this, &VideoFilter::newVideoFrame);
+    }
 }
 
 void VideoFilter::newVideoFrame(const QVideoFrame &frame)
@@ -169,16 +171,8 @@ void VideoFilter::newVideoFrame(const QVideoFrame &frame)
     m_frame.copyData(&input);
     input.unmap();
 
-    QRect rect(-m_captureRect.x(),
-               -m_captureRect.y(),
-                m_captureRect.x() * 2 + m_videoSink->videoSize().width(),
-                m_captureRect.y() * 2 + m_videoSink->videoSize().height());
-
-    m_future = QtConcurrent::run(&VideoFilter::processVideoFrame,
-                                 this,
-                                 m_orientation,
-                                 frame.surfaceFormat().isMirrored(),
-                                 rect);
+    m_future = QtConcurrent::run(&VideoFilter::processVideoFrame, this, m_orientation,
+                                 frame.surfaceFormat().isMirrored(), m_captureRect);
     m_watcher.setFuture(m_future);
     m_running = true;
 }
@@ -220,7 +214,7 @@ bool VideoFilter::processVideoFrame(int orientation, bool mirrored, QRect captur
         image = argb_data_to_image(data, width, height, 0, 3, 2, 1);
         break;
     case QVideoFrameFormat::Format_YUV420P:
-        image = yuv_420p_to_rgb(data, width, height);
+        image = yuv_420p_to_rgb(data, m_frame.stride[0], m_frame.stride[1], m_frame.stride[2], width, height);
         break;
     case QVideoFrameFormat::Format_NV12:
         /// nv12 format, encountered on macOS
@@ -251,7 +245,7 @@ bool VideoFilter::processVideoFrame(int orientation, bool mirrored, QRect captur
         QPoint center = image.rect().center();
         QTransform matrix;
         matrix.translate(center.x(), center.y());
-        matrix.rotate(-orientation);
+        matrix.rotate(orientation);
         image = image.transformed(matrix);
     }
 

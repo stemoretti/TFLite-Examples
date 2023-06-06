@@ -28,7 +28,6 @@ Settings::Settings(QObject *parent)
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     if (!System::instance->checkDirs())
         qWarning() << "Cannot create data directory. Settings won't be saved.";
-    readSettingsFile();
 }
 
 Settings::~Settings()

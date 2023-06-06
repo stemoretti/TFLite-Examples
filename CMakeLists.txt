@@ -76,12 +76,24 @@ target_link_libraries(tflite-examples
 
 set(qml_files
     qml/AboutPage.qml
+    qml/MainPage.qml
+    qml/CameraPage.qml
+    qml/CustomDialog.qml
+    qml/ImageClassificationCameraPage.qml
     qml/ImageClassificationPage.qml
+    qml/ImageClassificationVideoPage.qml
+    qml/ImageClassificationView.qml
     qml/main.qml
+    qml/ObjectDetectionCameraPage.qml
     qml/ObjectDetectionPage.qml
+    qml/ObjectDetectionVideoPage.qml
+    qml/ObjectDetectionView.qml
+    qml/PoseEstimationCameraPage.qml
     qml/PoseEstimationPage.qml
+    qml/PoseEstimationVideoPage.qml
+    qml/PoseEstimationView.qml
     qml/SettingsPage.qml
-    qml/VideoFilterBasePage.qml
+    qml/VideoPage.qml
 )
 
 qt_add_translations(tflite-examples

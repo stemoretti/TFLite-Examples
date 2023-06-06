@@ -1,50 +1,81 @@
 import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import BaseUI as UI
 
-import TFLite
+import TFLite as TFL
 
-VideoFilterBasePage {
+MainPage {
     id: root
 
     title: qsTr("Image Classification")
 
-    tflite: ImageClassification {
-        id: imageClassification
+    ColumnLayout {
+        anchors { left: parent.left; right: parent.right }
 
-        modelFile: Settings.classifierModel
-        labelsFile: Settings.classifierLabels
-        acceleration: Settings.nnapi
-        threads: Settings.threads
-        threshold: Settings.threshold
+        RowLayout {
+            Layout.alignment: Qt.AlignHCenter
 
-        onResults: function(captions) {
-            captionsList.model = captions
+            ToolButton {
+                icon.source: UI.Icons.camera
+                text: "Camera"
+                onClicked: stack.push(Qt.resolvedUrl("ImageClassificationCameraPage.qml"))
+            }
+            ToolButton {
+                icon.source: UI.Icons.video_library
+                text: "Video"
+                onClicked: stack.push(Qt.resolvedUrl("ImageClassificationVideoPage.qml"))
+            }
+        }
+
+        UI.SettingsItem {
+            title: qsTr("Image classification model")
+            subtitle: _formatFilename(TFL.Settings.classifierModel)
+            subtitlePlaceholder: qsTr("No file selected")
+            onClicked: selectModelFile(title, "classifierModel")
+        }
+
+        UI.SettingsItem {
+            title: qsTr("Image classification labels")
+            subtitle: _formatFilename(TFL.Settings.classifierLabels)
+            subtitlePlaceholder: qsTr("No file selected")
+            onClicked: selectModelFile(title, "classifierLabels")
+        }
+
+        UI.SettingsItem {
+            title: qsTr("Classification threshold")
+            subtitle: (TFL.Settings.threshold * 100).toFixed(1) + " %"
+            onClicked: thresholdPopup.open()
         }
     }
 
-    errorString: qsTr("Error loading model file:")
-        + "<br><br>%1<br><br>".arg(imageClassification.errorString)
-        + qsTr("Download a compatible image classification model from the address below, then load it in the settings page.")
-        + "<br><br><a href='%1'>%1</a>"
-          .arg("https://www.tensorflow.org/lite/models/trained")
+    CustomDialog {
+        id: thresholdPopup
 
-    ListView {
-        id: captionsList
+        onAccepted: TFL.Settings.threshold = thresholdSpin.value / 1000
 
-        anchors { left: parent.left; right: parent.right; margins: 10 }
-        y: parent.height - contentHeight
-        height: contentHeight
-        interactive: false
-        visible: root.active
+        SpinBox {
+            id: thresholdSpin
 
-        delegate: UI.LabelTitle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            color: "white"
-            style: Text.Outline
-            styleColor: "black"
-            opacity: { return [1, 0.7, 0.4, 0.4, 0.4][index] }
-            text: modelData.caption + " " + (modelData.confidence * 100).toFixed(1) + "%"
+            anchors.centerIn: parent
+            from: 1
+            value: Math.round(TFL.Settings.threshold * 1000)
+            to: 1000
+            stepSize: 1
+
+            validator: IntValidator {
+                bottom: thresholdSpin.from
+                top: thresholdSpin.to
+            }
+
+            textFromValue: function(value, locale) {
+                return value / 10 + " %"
+            }
+
+            valueFromText: function(text, locale) {
+                return Number.fromLocaleString(locale, text) * 10
+            }
         }
     }
 }

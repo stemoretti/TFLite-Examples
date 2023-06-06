@@ -16,7 +16,7 @@ jobs:
     env:
       ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/25.1.8937393
       ANDROID_NDK_HOST: linux-x86_64
-      QTVER: 6.5.0
+      QTVER: 6.5.1
 
     steps:
     - uses: actions/checkout@v3

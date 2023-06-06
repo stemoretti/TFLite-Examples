@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    Settings::init();
-    System::init();
-
     QQmlApplicationEngine *engine = new QQmlApplicationEngine();
+
+    System::init(engine);
+    Settings::init(engine);
 
     BaseUI::init(engine);
 
@@ -39,6 +39,8 @@ int main(int argc, char *argv[])
         engine->retranslate();
     });
 
+    Settings::instance->readSettingsFile();
+
     QUrl url("qrc:/qml/main.qml");
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
@@ -57,8 +59,6 @@ int main(int argc, char *argv[])
     int ret = app.exec();
 
     delete engine;
-    delete Settings::instance;
-    delete System::instance;
 
     return ret;
 }

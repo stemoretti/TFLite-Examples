@@ -16,7 +16,7 @@ class System : public QObject
 
 public:
     inline static System *instance;
-    static void init() { instance = new System(); }
+    static void init(QObject *parent) { instance = new System(parent); }
     static System *create(QQmlEngine *, QJSEngine *) { return instance; }
 
     static bool checkDirs();

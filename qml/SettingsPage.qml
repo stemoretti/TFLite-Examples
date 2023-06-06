@@ -41,20 +41,6 @@ UI.AppStackPage {
         return name
     }
 
-    function selectModelFile(modeltitle, modelfile) {
-        if (TFL.Settings[modelfile].length > 0)
-            fileDialog.currentFolder = TFL.Settings[modelfile]
-
-        fileDialog.fileSetting = modelfile
-        fileDialog.open()
-    }
-
-    function _formatFilename(path) {
-        if (path)
-            return decodeURIComponent(path).replace(/.*\//, "")
-        return ""
-    }
-
     component CustomDialog: Dialog {
         parent: Overlay.overlay
 
@@ -158,65 +144,6 @@ UI.AppStackPage {
                     subtitle: TFL.Settings.threads
                     onClicked: threadsPopup.open()
                 }
-
-                UI.SettingsSectionTitle { text: qsTr("Object detection") }
-
-                UI.SettingsItem {
-                    title: qsTr("Objects detection model")
-                    subtitle: _formatFilename(TFL.Settings.objectsModel)
-                    subtitlePlaceholder: qsTr("No file selected")
-                    onClicked: selectModelFile(title, "objectsModel")
-                }
-
-                UI.SettingsItem {
-                    title: qsTr("Objects detection labels")
-                    subtitle: _formatFilename(TFL.Settings.objectsLabels)
-                    subtitlePlaceholder: qsTr("No file selected")
-                    onClicked: selectModelFile(title, "objectsLabels")
-                }
-
-                UI.SettingsItem {
-                    title: qsTr("Minimum confidence")
-                    subtitle: Math.round(TFL.Settings.confidence * 100) + " %"
-                    onClicked: confidencePopup.open()
-                }
-
-                UI.SettingsSectionTitle { text: qsTr("Image classification") }
-
-                UI.SettingsItem {
-                    title: qsTr("Image classification model")
-                    subtitle: _formatFilename(TFL.Settings.classifierModel)
-                    subtitlePlaceholder: qsTr("No file selected")
-                    onClicked: selectModelFile(title, "classifierModel")
-                }
-
-                UI.SettingsItem {
-                    title: qsTr("Image classification labels")
-                    subtitle: _formatFilename(TFL.Settings.classifierLabels)
-                    subtitlePlaceholder: qsTr("No file selected")
-                    onClicked: selectModelFile(title, "classifierLabels")
-                }
-
-                UI.SettingsItem {
-                    title: qsTr("Classification threshold")
-                    subtitle: (TFL.Settings.threshold * 100).toFixed(1) + " %"
-                    onClicked: thresholdPopup.open()
-                }
-
-                UI.SettingsSectionTitle { text: qsTr("Pose estimation") }
-
-                UI.SettingsItem {
-                    title: qsTr("Pose estimation model")
-                    subtitle: _formatFilename(TFL.Settings.poseModel)
-                    subtitlePlaceholder: qsTr("No file selected")
-                    onClicked: selectModelFile(title, "poseModel")
-                }
-
-                UI.SettingsItem {
-                    title: qsTr("Minimum score")
-                    subtitle: TFL.Settings.score.toFixed(1)
-                    onClicked: scorePopup.open()
-                }
             }
         }
     }
@@ -308,35 +235,6 @@ UI.AppStackPage {
     }
 
     CustomDialog {
-        id: confidencePopup
-
-        onAccepted: TFL.Settings.confidence = confidenceSpin.value / 100
-
-        SpinBox {
-            id: confidenceSpin
-
-            anchors.centerIn: parent
-            from: 1
-            value: Math.round(TFL.Settings.confidence * 100)
-            to: 100
-            stepSize: 1
-
-            validator: IntValidator {
-                bottom: confidenceSpin.from
-                top: confidenceSpin.to
-            }
-
-            textFromValue: function(value, locale) {
-                return value + " %"
-            }
-
-            valueFromText: function(text, locale) {
-                return Number.fromLocaleString(locale, text)
-            }
-        }
-    }
-
-    CustomDialog {
         id: threadsPopup
 
         onAccepted: TFL.Settings.threads = threadsSpin.value
@@ -355,72 +253,5 @@ UI.AppStackPage {
                 top: threadsSpin.to
             }
         }
-    }
-
-
-    CustomDialog {
-        id: thresholdPopup
-
-        onAccepted: TFL.Settings.threshold = thresholdSpin.value / 1000
-
-        SpinBox {
-            id: thresholdSpin
-
-            anchors.centerIn: parent
-            from: 1
-            value: Math.round(TFL.Settings.threshold * 1000)
-            to: 1000
-            stepSize: 1
-
-            validator: IntValidator {
-                bottom: thresholdSpin.from
-                top: thresholdSpin.to
-            }
-
-            textFromValue: function(value, locale) {
-                return value / 10 + " %"
-            }
-
-            valueFromText: function(text, locale) {
-                return Number.fromLocaleString(locale, text) * 10
-            }
-        }
-    }
-
-    CustomDialog {
-        id: scorePopup
-
-        onAccepted: TFL.Settings.score = scoreSpin.value / 10
-
-        SpinBox {
-            id: scoreSpin
-
-            anchors.centerIn: parent
-            from: 1
-            value: Math.round(TFL.Settings.score * 10)
-            to: 10
-
-            validator: IntValidator {
-                bottom: scoreSpin.from
-                top: scoreSpin.to
-            }
-
-            textFromValue: function(value, locale) {
-                return value / 10
-            }
-
-            valueFromText: function(text, locale) {
-                return Number.fromLocaleString(locale, text) * 10
-            }
-        }
-    }
-
-    FileDialog {
-        id: fileDialog
-
-        property string fileSetting
-
-        currentFolder: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0]
-        onAccepted: TFL.Settings[fileSetting] = selectedFile
     }
 }

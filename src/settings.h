@@ -37,7 +37,7 @@ public:
     ~Settings();
 
     inline static Settings *instance;
-    static void init() { instance = new Settings(); }
+    static void init(QObject *parent) { instance = new Settings(parent); }
     static Settings *create(QQmlEngine *, QJSEngine *) { return instance; }
 
     void readSettingsFile();

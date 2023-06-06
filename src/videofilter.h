@@ -14,12 +14,18 @@
 
 struct SimpleVideoFrame
 {
-    SimpleVideoFrame() : dataSize(0) {}
+    SimpleVideoFrame() : dataSize(0), planeCount(0) {}
     Q_DISABLE_COPY(SimpleVideoFrame)
 
     void copyData(QVideoFrame *frame) {
+        int framePlaneCount = frame->planeCount();
+        if (planeCount != framePlaneCount) {
+            planeCount = framePlaneCount;
+            stride = std::make_unique<int[]>(planeCount);
+        }
+
         int sz = 0;
-        for (int i = 0; i < frame->planeCount(); i++)
+        for (int i = 0; i < planeCount; i++)
             sz += frame->mappedBytes(i);
 
         if (sz != dataSize) {
@@ -27,17 +33,21 @@ struct SimpleVideoFrame
             data = std::make_unique<unsigned char[]>(dataSize);
         }
 
-        for (int i = 0, shift = 0; i < frame->planeCount(); i++) {
+        for (int i = 0, shift = 0; i < planeCount; i++) {
+            stride[i] = frame->bytesPerLine(i);
             int bytes = frame->mappedBytes(i);
             memcpy(data.get() + shift, frame->bits(i), bytes);
             shift += bytes;
         }
+
         size = frame->size();
         pixelFormat = frame->pixelFormat();
     }
 
     std::unique_ptr<unsigned char[]> data;
     int dataSize;
+    int planeCount;
+    std::unique_ptr<int[]> stride;
     QSize size;
     QVideoFrameFormat::PixelFormat pixelFormat;
 };
@@ -65,6 +75,15 @@ public:
 
     QObject *videoSink();
     void setVideoSink(QObject *videoSink);
+
+    Q_INVOKABLE void clearSink()
+    {
+        if (m_videoSink) {
+            disconnect(m_videoSink, &QVideoSink::videoFrameChanged,
+                       this, &VideoFilter::newVideoFrame);
+            m_videoSink = nullptr;
+        }
+    }
 
 Q_SIGNALS:
     void activeChanged(bool active);
